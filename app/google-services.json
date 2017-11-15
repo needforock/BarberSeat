@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "468309376225",
+    "firebase_url": "https://barberseat-a2756.firebaseio.com",
+    "project_id": "barberseat-a2756",
+    "storage_bucket": "barberseat-a2756.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468309376225:android:be925c14c9838279",
+        "android_client_info": {
+          "package_name": "ve.needforock.barberseat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468309376225-4n56u59pqm4c53ii6gokmlp1lqovlv4q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ve.needforock.barberseat",
+            "certificate_hash": "8e389cd8680ce5b66f4e2033fb127d1e171834bb"
+          }
+        },
+        {
+          "client_id": "468309376225-m0i6696peiqdg6687bgt75a2mmhrq63g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh9mO_xoDvIoLqA3o4A7_b8VjUGHcGjgM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468309376225-m0i6696peiqdg6687bgt75a2mmhrq63g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
