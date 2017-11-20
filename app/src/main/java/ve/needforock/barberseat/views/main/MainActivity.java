@@ -98,14 +98,14 @@ public class MainActivity extends AppCompatActivity
         barberDay1.setThirteen(true);
         barberDay1.setDate(appDate);
 
-        String appointKey = new Nodes().user(customerUid).child("appointments").push().getKey();
+        /*String appointKey = new Nodes().user(customerUid).child("appointments").push().getKey();
         new Nodes().user(customerUid).child("appointments").child(appointKey).setValue(appointment1);
         new Nodes().appointments(appointment1.getBarberUid()).child(appointKey).setValue(appointment1);
         new Nodes().appointmentDay(appointment1.getBarberUid())
                 .child(String.valueOf(finalCal.get(finalCal.YEAR)))
                 .child(String.valueOf(finalCal.get(finalCal.MONTH)))
                 .child(String.valueOf(finalCal.get(finalCal.DAY_OF_MONTH)))
-                .setValue(barberDay1);
+                .setValue(barberDay1);*/
 
         Calendar finalCal2 = Calendar.getInstance();
         Appointment appointment2 = new Appointment();
@@ -120,14 +120,14 @@ public class MainActivity extends AppCompatActivity
         barberDay2.setNine(true);
         barberDay2.setDate(appDate2);
 
-        String appointKey2 = new Nodes().user(customerUid).child("appointments").push().getKey();
+       /* String appointKey2 = new Nodes().user(customerUid).child("appointments").push().getKey();
         new Nodes().user(customerUid).child("appointments").child(appointKey2).setValue(appointment2);
         new Nodes().appointments(appointment2.getBarberUid()).child(appointKey2).setValue(appointment2);
         new Nodes().appointmentDay(appointment1.getBarberUid())
                 .child(String.valueOf(finalCal2.get(finalCal2.YEAR)))
                 .child(String.valueOf(finalCal2.get(finalCal2.MONTH)))
                 .child(String.valueOf(finalCal2.get(finalCal2.DAY_OF_MONTH)))
-                .setValue(barberDay2);
+                .setValue(barberDay2);*/
 
 
         Job shave = new Job();

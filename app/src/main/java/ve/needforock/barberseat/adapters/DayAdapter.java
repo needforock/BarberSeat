@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 import ve.needforock.barberseat.R;
@@ -17,10 +18,14 @@ import ve.needforock.barberseat.R;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayHolder>{
 
-    List<Boolean> hours;
+    private List<Boolean> hours;
+    private DayListener dayListener;
+    private Date date;
 
-    public DayAdapter(List<Boolean> hours) {
+    public DayAdapter(Date date, List<Boolean> hours, DayListener dayListener) {
+        this.date = date;
         this.hours = hours;
+        this.dayListener = dayListener;
     }
 
     @Override
@@ -30,7 +35,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayHolder>{
     }
 
     @Override
-    public void onBindViewHolder(DayHolder holder, int position) {
+    public void onBindViewHolder(final DayHolder holder, final int position) {
         boolean appointment = hours.get(position);
         Log.d("HORA", String.valueOf(hours.get(0)));
         String hour = String.valueOf(position+9) +":00";
@@ -40,6 +45,14 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayHolder>{
         }else{
             holder.occupied.setText("Disponible");
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String auxHour = String.valueOf(position+9) +":00";
+                dayListener.clickedHour(auxHour, date);
+            }
+        });
 
     }
 

@@ -1,6 +1,8 @@
 package ve.needforock.barberseat.views;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,13 +20,16 @@ import java.util.List;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.adapters.DayAdapter;
+import ve.needforock.barberseat.adapters.DayListener;
+import ve.needforock.barberseat.data.AppointmentToFireBase;
 import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.models.BarberDay;
 
-public class DayView extends AppCompatActivity {
+public class DayView extends AppCompatActivity implements DayListener{
 
     private RecyclerView recyclerView;
     private DayAdapter dayAdapter;
+    private String barberUid;
 
 
     @Override
@@ -32,7 +37,7 @@ public class DayView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_view);
 
-        String barberUid = getIntent().getStringExtra(BarberSelectionActivity.BARBER_UID);
+       barberUid = getIntent().getStringExtra(BarberSelectionActivity.BARBER_UID);
         final Date date = new Date(getIntent().getLongExtra(BarberSelectionActivity.SELECTED_DATE, -1));
 
         Toast.makeText(this, String.valueOf(date), Toast.LENGTH_SHORT).show();
@@ -70,7 +75,7 @@ public class DayView extends AppCompatActivity {
                         recyclerView = findViewById(R.id.hourRv);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
                         recyclerView.setLayoutManager(linearLayoutManager);
-                        dayAdapter = new DayAdapter(hours);
+                        dayAdapter = new DayAdapter(date,hours, DayView.this);
                         recyclerView.setAdapter(dayAdapter);
                     }else{
                         BarberDay barberDay1 = new BarberDay();
@@ -84,7 +89,7 @@ public class DayView extends AppCompatActivity {
                         recyclerView = findViewById(R.id.hourRv);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
                         recyclerView.setLayoutManager(linearLayoutManager);
-                        dayAdapter = new DayAdapter(hours);
+                        dayAdapter = new DayAdapter(date, hours, DayView.this);
                         recyclerView.setAdapter(dayAdapter);
                     }
 
@@ -99,13 +104,40 @@ public class DayView extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
     }
 
 
+    @Override
+    public void clickedHour(final String hour, final Date date) {
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        final AlertDialog.Builder builder = new AlertDialog.Builder(DayView.this);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        String day = String.valueOf(cal.get(cal.DAY_OF_MONTH));
+        String month = String.valueOf(cal.get(cal.MONTH)+1);
+        String year = String.valueOf(cal.get(cal.YEAR));
+
+
+// 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(day + "-" + month + "-" + year + " a las " + hour)
+                .setTitle("Desea reservar la siguiente hora?");
+
+
+        // Add the buttons
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            new AppointmentToFireBase().SaveAppointment(DayView.this, barberUid,date,hour);
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+
+// 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 }
