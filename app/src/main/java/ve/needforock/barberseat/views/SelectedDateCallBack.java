@@ -8,5 +8,5 @@ import java.util.Date;
 
 public interface SelectedDateCallBack {
 
-    void selectedDate(Date date);
+    void selectedDate(Date date, String barberUid);
 }

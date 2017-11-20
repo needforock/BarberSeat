@@ -46,7 +46,7 @@ public class SetCalendar {
             @Override
             public void onSelectDate(Date date, View view) {
 
-                selectedDateCallBack.selectedDate(date);
+                selectedDateCallBack.selectedDate(date, barberUid);
                 dialogCaldroidFragment.dismiss();
 
             }
@@ -86,7 +86,7 @@ public class SetCalendar {
                                 if (fullDay) {
                                     setFullDayColor(dialogCaldroidFragment, barberDay.getDate());
                                 } else {
-                                    setGreenDayColor(dialogCaldroidFragment, barberDay.getDate());
+                                    setGreenDayColor(dialogCaldroidFragment, barberDay);
                                 }
                             } else {
                                 Toast.makeText(context, "Dia Nulo", Toast.LENGTH_SHORT).show();
@@ -117,13 +117,20 @@ public class SetCalendar {
 
     }
 
-    public void setGreenDayColor(CaldroidFragment dialogCaldroidFragment, Date date) {
+    public void setGreenDayColor(CaldroidFragment dialogCaldroidFragment, BarberDay barberDay ) {
 
-        Date greenDate = date;
+        Date greenDate = barberDay.getDate();
+
         if (dialogCaldroidFragment != null) {
-            ColorDrawable green = new ColorDrawable(Color.GREEN);
-            dialogCaldroidFragment.setBackgroundDrawableForDate(green, greenDate);
-            dialogCaldroidFragment.setTextColorForDate(R.color.white, greenDate);
+            if(barberDay.isNine() || barberDay.isTen() || barberDay.isEleven() || barberDay.isTwelve()
+                    || barberDay.isThirteen() || barberDay.isFourteen() || barberDay.isFifteen() ||
+                    barberDay.isSixteen() || barberDay.isSeventeen() || barberDay.isEightteen() ||
+                    barberDay.isNinteen() || barberDay.isTwenty()){
+                ColorDrawable green = new ColorDrawable(Color.GREEN);
+                dialogCaldroidFragment.setBackgroundDrawableForDate(green, greenDate);
+                dialogCaldroidFragment.setTextColorForDate(R.color.white, greenDate);
+            }
+
         }
         dialogCaldroidFragment.refreshView();
 

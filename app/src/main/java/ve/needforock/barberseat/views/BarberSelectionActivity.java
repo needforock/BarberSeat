@@ -1,10 +1,10 @@
 package ve.needforock.barberseat.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
 
@@ -20,6 +20,8 @@ import ve.needforock.barberseat.models.Barber;
 public class BarberSelectionActivity extends AppCompatActivity implements BarberListener, SelectedDateCallBack {
 
     public static final String SELECTED_JOB = "ve.needforock.barberseat.views.KEY.SELECTED_JOB";
+    public static final String SELECTED_DATE = "ve.needforock.barberseat.views.KEY.SELECTED_DATE" ;
+    public static final String BARBER_UID = "ve.needforock.barberseat.views.KEY.BARBER_UID";
 
     private ArrayList<Barber> barbers;
     private RecyclerView recyclerView;
@@ -78,10 +80,15 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
 
 
     @Override
-    public void selectedDate(Date date) {
+    public void selectedDate(Date date, String barberUid) {
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
-        Toast.makeText(BarberSelectionActivity.this, "Fecha seleccionada " + formatter.format(date),
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(BarberSelectionActivity.this, "Fecha seleccionada " + formatter.format(date),
+               // Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(BarberSelectionActivity.this, DayView.class);
+        intent.putExtra(SELECTED_DATE, date.getTime());
+        intent.putExtra(BARBER_UID, barberUid);
+        startActivity(intent);
+
 
     }
 }
