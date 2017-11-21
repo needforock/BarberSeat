@@ -40,7 +40,7 @@ public class DayView extends AppCompatActivity implements DayListener{
        barberUid = getIntent().getStringExtra(BarberSelectionActivity.BARBER_UID);
         final Date date = new Date(getIntent().getLongExtra(BarberSelectionActivity.SELECTED_DATE, -1));
 
-        Toast.makeText(this, String.valueOf(date), Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -127,6 +127,7 @@ public class DayView extends AppCompatActivity implements DayListener{
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             new AppointmentToFireBase().SaveAppointment(DayView.this, barberUid,date,hour);
+            finish();
 
             }
         });

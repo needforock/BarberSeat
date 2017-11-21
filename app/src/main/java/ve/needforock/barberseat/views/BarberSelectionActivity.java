@@ -82,12 +82,12 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
     @Override
     public void selectedDate(Date date, String barberUid) {
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
-        //Toast.makeText(BarberSelectionActivity.this, "Fecha seleccionada " + formatter.format(date),
-               // Toast.LENGTH_SHORT).show();
+
         Intent intent = new Intent(BarberSelectionActivity.this, DayView.class);
         intent.putExtra(SELECTED_DATE, date.getTime());
         intent.putExtra(BARBER_UID, barberUid);
         startActivity(intent);
+        finish();
 
 
     }

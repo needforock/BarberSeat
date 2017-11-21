@@ -26,7 +26,20 @@ public class AppointmentToFireBase {
         appointment.setBarberUid(barberUid);
         final String customerUid = new CurrentUser().getUid();
         appointment.setUserUID(customerUid);
-        appointment.setDate(date);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date);
+
+        int day = cal2.get(cal2.DAY_OF_MONTH);
+        int month = cal2.get(cal2.MONTH);
+        int year = cal2.get(cal2.YEAR);
+        String[] fullHour = hour.split(":");
+        int hours = Integer.parseInt(fullHour[0]);
+        int  minutes = Integer.parseInt(fullHour[1]);
+        cal2.set(year, month, day, hours,minutes);
+        Date finalDate = cal2.getTime();
+
+        appointment.setDate(finalDate);
 
         DatabaseReference barber = new Nodes().barber(barberUid);
         barber.addListenerForSingleValueEvent(new ValueEventListener() {
