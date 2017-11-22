@@ -1,12 +1,13 @@
 package ve.needforock.barberseat.models;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Soporte on 13-Nov-17.
  */
 
-public class Job  {
+public class Job implements Serializable {
     private String name;
     private List<Barber> barberList;
 

@@ -1,4 +1,4 @@
-package ve.needforock.barberseat.views;
+package ve.needforock.barberseat.views.appointment;
 
 import android.content.Context;
 import android.graphics.Color;

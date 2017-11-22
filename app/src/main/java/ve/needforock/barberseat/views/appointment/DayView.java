@@ -1,4 +1,4 @@
-package ve.needforock.barberseat.views;
+package ve.needforock.barberseat.views.appointment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -24,12 +24,17 @@ import ve.needforock.barberseat.adapters.DayListener;
 import ve.needforock.barberseat.data.AppointmentToFireBase;
 import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.models.BarberDay;
+import ve.needforock.barberseat.models.Job;
+
+
 
 public class DayView extends AppCompatActivity implements DayListener{
 
     private RecyclerView recyclerView;
     private DayAdapter dayAdapter;
-    private String barberUid;
+    private String barberUid, jobName;
+    private Job job;
+
 
 
     @Override
@@ -40,7 +45,8 @@ public class DayView extends AppCompatActivity implements DayListener{
        barberUid = getIntent().getStringExtra(BarberSelectionActivity.BARBER_UID);
         final Date date = new Date(getIntent().getLongExtra(BarberSelectionActivity.SELECTED_DATE, -1));
 
-
+        job = (Job) getIntent().getSerializableExtra(BarberSelectionActivity.JOB );
+        jobName = job.getName();
 
 
 
@@ -126,7 +132,7 @@ public class DayView extends AppCompatActivity implements DayListener{
         // Add the buttons
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            new AppointmentToFireBase().SaveAppointment(DayView.this, barberUid,date,hour);
+            new AppointmentToFireBase().SaveAppointment(DayView.this, barberUid,date,hour, jobName);
             finish();
 
             }

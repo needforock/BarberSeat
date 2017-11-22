@@ -1,4 +1,4 @@
-package ve.needforock.barberseat.views;
+package ve.needforock.barberseat.views.appointment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +22,8 @@ import ve.needforock.barberseat.models.Job;
 
 public class JobSelectionActivity extends AppCompatActivity implements JobListener {
 
-    public static final String SELECTED_JOB = "ve.needforock.barberseat.views.KEY.SELECTED_JOB";
+    public static final String BARBERS = "ve.needforock.barberseat.views.appointment.KEY.BARBERS";
+    public static final String SELECTED_JOB ="ve.needforock.barberseat.views.appointment.KEY.SELECTED_JOB";
     private RecyclerView recyclerView;
     private JobAdapter jobAdapter;
 
@@ -59,7 +60,8 @@ public class JobSelectionActivity extends AppCompatActivity implements JobListen
             ArrayList<Barber> barbers = new ArrayList<>();
             barbers.addAll(job.getBarberList());
             Intent intent = new Intent(JobSelectionActivity.this, BarberSelectionActivity.class);
-            intent.putExtra(SELECTED_JOB, barbers);
+            intent.putExtra(BARBERS, barbers);
+            intent.putExtra(SELECTED_JOB, job);
             startActivity(intent);
             finish();
         }

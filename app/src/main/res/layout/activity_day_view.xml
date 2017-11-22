@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ve.needforock.barberseat.views.DayView">
+    android:theme="@style/AppTheme"
+    tools:context="ve.needforock.barberseat.views.appointment.DayView">
 
 
     <android.support.v7.widget.RecyclerView

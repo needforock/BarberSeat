@@ -24,6 +24,7 @@ import java.util.List;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.adapters.AppointmentAdapter;
+import ve.needforock.barberseat.adapters.AppointmentListener;
 import ve.needforock.barberseat.data.CurrentUser;
 import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.data.Queries;
@@ -31,13 +32,15 @@ import ve.needforock.barberseat.models.Appointment;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.BarberDay;
 import ve.needforock.barberseat.models.Job;
-import ve.needforock.barberseat.views.JobSelectionActivity;
+import ve.needforock.barberseat.views.appointment.JobSelectionActivity;
+import ve.needforock.barberseat.views.appointment_detail.AppointmentDetailActivity;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AppointmentListener {
 
     private RecyclerView recyclerView;
     private AppointmentAdapter appointmentAdapter;
+    public static final String APPOINTMENT = "ve.needforock.barberseat.views.main.KEY.APPOINTMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        appointmentAdapter = new AppointmentAdapter(query);
+        appointmentAdapter = new AppointmentAdapter(MainActivity.this, query);
         recyclerView.setAdapter(appointmentAdapter);
 
 
@@ -229,5 +232,13 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void appointmentClicked(Appointment appointment) {
+        Intent intent = new Intent(MainActivity.this, AppointmentDetailActivity.class);
+        intent.putExtra(APPOINTMENT, appointment);
+        startActivity(intent);
+
     }
 }

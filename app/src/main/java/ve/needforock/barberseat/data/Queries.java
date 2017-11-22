@@ -31,4 +31,5 @@ public class Queries {
     public DatabaseReference AppmntsDay(String barberUid, int year, int month, int day){
         return new Queries().AppmntsMonth(barberUid, year, month).child(String.valueOf(day));
     }
+
 }

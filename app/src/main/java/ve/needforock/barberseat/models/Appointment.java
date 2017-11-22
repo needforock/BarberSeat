@@ -1,12 +1,13 @@
 package ve.needforock.barberseat.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Soporte on 13-Nov-17.
  */
 
-public class Appointment {
+public class Appointment implements Serializable {
     private String userUID, job, barberUid, barberName;
     private Date date;
 

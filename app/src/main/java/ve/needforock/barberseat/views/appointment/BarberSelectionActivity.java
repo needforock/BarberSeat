@@ -1,4 +1,4 @@
-package ve.needforock.barberseat.views;
+package ve.needforock.barberseat.views.appointment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,25 +16,28 @@ import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.adapters.BarberAdapter;
 import ve.needforock.barberseat.adapters.BarberListener;
 import ve.needforock.barberseat.models.Barber;
+import ve.needforock.barberseat.models.Job;
 
 public class BarberSelectionActivity extends AppCompatActivity implements BarberListener, SelectedDateCallBack {
 
-    public static final String SELECTED_JOB = "ve.needforock.barberseat.views.KEY.SELECTED_JOB";
-    public static final String SELECTED_DATE = "ve.needforock.barberseat.views.KEY.SELECTED_DATE" ;
-    public static final String BARBER_UID = "ve.needforock.barberseat.views.KEY.BARBER_UID";
+    public static final String JOB = "ve.needforock.barberseat.views.appointment.KEY.JOB";
+    public static final String SELECTED_DATE = "ve.needforock.barberseat.views.KEY.appointment.SELECTED_DATE" ;
+    public static final String BARBER_UID = "ve.needforock.barberseat.views.KEY.appointment.BARBER_UID";
 
     private ArrayList<Barber> barbers;
     private RecyclerView recyclerView;
     private BarberAdapter barberAdapter;
     private CaldroidFragment dialogCaldroidFragment,caldroidFragment;
     private Bundle state;
+    private Job job;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barber_selection);
 
-        barbers = (ArrayList<Barber>) getIntent().getSerializableExtra(SELECTED_JOB);
+        barbers = (ArrayList<Barber>) getIntent().getSerializableExtra(JobSelectionActivity.BARBERS);
+        job  = (Job) getIntent().getSerializableExtra(JobSelectionActivity.SELECTED_JOB);
 
 
         recyclerView = findViewById(R.id.barberRv);
@@ -86,6 +89,7 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
         Intent intent = new Intent(BarberSelectionActivity.this, DayView.class);
         intent.putExtra(SELECTED_DATE, date.getTime());
         intent.putExtra(BARBER_UID, barberUid);
+        intent.putExtra(JOB, job);
         startActivity(intent);
         finish();
 

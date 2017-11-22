@@ -21,11 +21,15 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.JobSelectionActivity"
+            android:name=".views.appointment.JobSelectionActivity"
             android:label="@string/title_activity_form"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".views.BarberSelectionActivity" />
-        <activity android:name=".views.DayView"></activity>
+        <activity android:name=".views.appointment.BarberSelectionActivity" />
+        <activity android:name=".views.appointment.DayView" />
+        <activity
+            android:name=".views.appointment_detail.AppointmentDetailActivity"
+            android:label="@string/title_activity_appointment_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

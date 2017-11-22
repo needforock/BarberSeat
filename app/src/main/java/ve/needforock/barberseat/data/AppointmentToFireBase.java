@@ -20,12 +20,13 @@ import ve.needforock.barberseat.models.BarberDay;
  */
 
 public class AppointmentToFireBase {
-    public void SaveAppointment(final Context context, final String barberUid, Date date, final String hour){
+    public void SaveAppointment(final Context context, final String barberUid, Date date, final String hour, String jobName){
 
         final Appointment appointment = new Appointment();
         appointment.setBarberUid(barberUid);
         final String customerUid = new CurrentUser().getUid();
         appointment.setUserUID(customerUid);
+        appointment.setJob(jobName);
 
         Calendar cal2 = Calendar.getInstance();
         cal2.setTime(date);

@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="ve.needforock.barberseat.views.JobSelectionActivity"
+    tools:context="ve.needforock.barberseat.views.appointment.JobSelectionActivity"
     android:orientation="vertical"
-    tools:showIn="@layout/activity_form">
+    tools:showIn="@layout/activity_form"
+    android:theme="@style/AppTheme">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/jobRv"

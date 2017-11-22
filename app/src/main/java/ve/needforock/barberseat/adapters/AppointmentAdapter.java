@@ -16,19 +16,27 @@ import ve.needforock.barberseat.models.Appointment;
 
 public class AppointmentAdapter extends FirebaseRecyclerAdapter<Appointment, AppointmentAdapter.AppointmentHolder>{
 
+    private AppointmentListener appointmentListener;
 
-
-    public AppointmentAdapter(Query ref) {
+    public AppointmentAdapter(AppointmentListener appointmentListener, Query ref) {
         super(Appointment.class, R.layout.list_item_appointment, AppointmentHolder.class, ref);
+        this.appointmentListener = appointmentListener;
 
     }
 
     @Override
-    protected void populateViewHolder(AppointmentHolder viewHolder, Appointment model, int position) {
+    protected void populateViewHolder(AppointmentHolder viewHolder, final Appointment model, int position) {
 
 
             viewHolder.barber.setText(model.getBarberName());
             viewHolder.date.setText(String.valueOf(model.getDate()));
+
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    appointmentListener.appointmentClicked(model);
+                }
+            });
 
 
 
