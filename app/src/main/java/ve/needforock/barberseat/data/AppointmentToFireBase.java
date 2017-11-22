@@ -122,7 +122,6 @@ public class AppointmentToFireBase {
                     auxBarberDay.setTwenty(true);
                     uploadAppointment(appointment, barberUid, customerUid);
                 }
-
                 ref.setValue(auxBarberDay);
             }
 
@@ -135,6 +134,7 @@ public class AppointmentToFireBase {
 
     public void uploadAppointment(Appointment appointment, String barberUid, String customerUid){
         String appointKey = new Nodes().user(customerUid).child("appointments").push().getKey();
+        appointment.setKey(appointKey);
         new Nodes().appointments(barberUid).child(appointKey).setValue(appointment);
         new Nodes().user(customerUid).child("appointments").child(appointKey).setValue(appointment);
     }

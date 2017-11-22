@@ -42,7 +42,7 @@ public class JobSelectionActivity extends AppCompatActivity implements JobListen
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        jobAdapter = new JobAdapter(this, query);
+        jobAdapter = new JobAdapter(this, query, this);
         recyclerView.setAdapter(jobAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

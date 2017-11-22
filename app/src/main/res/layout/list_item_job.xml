@@ -7,23 +7,30 @@
     android:layout_marginRight="5dp"
     android:layout_marginLeft="5dp"
     android:layout_marginTop="5dp"
-    android:paddingBottom="8dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="16dp"
-    android:paddingTop="8dp">
 
+    >
+
+    <ImageView
+        android:id="@+id/jobPicIv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
 
 
     <TextView
-        android:paddingTop="12dp"
-        android:layout_marginLeft="8dp"
-        android:background="?android:selectableItemBackground"
         android:id="@+id/jobTv"
-        android:text="Trabajo"
-        android:layout_centerVertical="true"
-        android:textSize="16sp"
         android:layout_width="175dp"
-        android:layout_height="48dp" />
+        android:layout_height="48dp"
+        android:layout_alignBottom="@+id/jobPicIv"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="13dp"
+        android:background="?android:selectableItemBackground"
+        android:padding="12dp"
+        android:text="Trabajo"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 
 

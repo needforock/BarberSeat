@@ -8,10 +8,18 @@ import java.util.Date;
  */
 
 public class Appointment implements Serializable {
-    private String userUID, job, barberUid, barberName;
+    private String userUID, job, barberUid, barberName, key;
     private Date date;
 
     public Appointment() {
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getUserUID() {
