@@ -20,7 +20,7 @@ import ve.needforock.barberseat.data.DeleteAppointment;
 import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.models.Appointment;
 import ve.needforock.barberseat.models.Barber;
-import ve.needforock.barberseat.views.main.MainActivity;
+import ve.needforock.barberseat.views.appointment.AppointmentFragment;
 
 public class AppointmentDetailActivity extends AppCompatActivity {
 
@@ -33,7 +33,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        appointment = (Appointment) getIntent().getSerializableExtra(MainActivity.APPOINTMENT);
+        appointment = (Appointment) getIntent().getSerializableExtra(AppointmentFragment.APPOINTMENT);
 
         getSupportActionBar().setTitle("");
 

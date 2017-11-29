@@ -1,43 +1,47 @@
 package ve.needforock.barberseat.views.main;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
-import com.google.firebase.database.Query;
+import com.firebase.ui.auth.AuthUI;
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ve.needforock.barberseat.R;
-import ve.needforock.barberseat.adapters.AppointmentAdapter;
-import ve.needforock.barberseat.adapters.AppointmentListener;
 import ve.needforock.barberseat.data.CurrentUser;
 import ve.needforock.barberseat.data.Nodes;
-import ve.needforock.barberseat.data.Queries;
-import ve.needforock.barberseat.models.Appointment;
+import ve.needforock.barberseat.data.UserToFireBase;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Job;
-import ve.needforock.barberseat.views.appointment.JobSelectionActivity;
-import ve.needforock.barberseat.views.appointment_detail.AppointmentDetailActivity;
+import ve.needforock.barberseat.views.appointment.AppointmentFragment;
+import ve.needforock.barberseat.views.appointment.JobFragment;
+import ve.needforock.barberseat.views.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AppointmentListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    private RecyclerView recyclerView;
-    private AppointmentAdapter appointmentAdapter;
-    public static final String APPOINTMENT = "ve.needforock.barberseat.views.main.KEY.APPOINTMENT";
+
+    private TextView userName, email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +50,24 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Fragment fragment = null;
+        Class fragmentClass = null;
+        fragmentClass = JobFragment.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+        //////////////////////Manejar Header del Drawer///////////////////////
 
 
 
-        final String customerUid = new CurrentUser().getUid();
+
+
 
         //Registrar el barbero en firebase database
         final Barber newBarber = new Barber();
@@ -65,15 +83,7 @@ public class MainActivity extends AppCompatActivity
         new Nodes().barber(newBarber2.getUid()).setValue(newBarber2);
 
 
-        Query query = new Queries().CustomerAppointments(customerUid);
 
-
-        recyclerView = findViewById(R.id.appointmentRv);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-        appointmentAdapter = new AppointmentAdapter(MainActivity.this, query);
-        recyclerView.setAdapter(appointmentAdapter);
 
 
 
@@ -100,18 +110,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, JobSelectionActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -120,6 +118,27 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header=navigationView.getHeaderView(0);
+
+        userName = (TextView)header.findViewById(R.id.userName2Tv);
+        email = (TextView)header.findViewById(R.id.email2Tv);
+        CircularImageView circularImageView = (CircularImageView) header.findViewById(R.id.avatar2Ci);
+
+        FirebaseUser firebaseUser = new CurrentUser().getCurrentUser();
+
+        Uri userImageUri = firebaseUser.getPhotoUrl();
+        if(userImageUri!=null){
+
+            Picasso.with(this).load(userImageUri).into(circularImageView);
+        }
+
+
+        email.setText(firebaseUser.getEmail());
+        userName.setText(firebaseUser.getDisplayName());
+        new UserToFireBase().SaveUserToFireBase(userImageUri);
+
+
     }
 
     @Override
@@ -160,17 +179,34 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Fragment fragment = null;
+        Class fragmentClass = null;
+
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            fragmentClass = AppointmentFragment.class;
+            setFragment(fragment, fragmentClass);
+
         } else if (id == R.id.nav_gallery) {
+            fragmentClass = JobFragment.class;
+            setFragment(fragment, fragmentClass);
 
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_profile) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            finish();
+                        }
+
+                    });
 
         }
 
@@ -179,11 +215,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void appointmentClicked(Appointment appointment) {
-        Intent intent = new Intent(MainActivity.this, AppointmentDetailActivity.class);
-        intent.putExtra(APPOINTMENT, appointment);
-        startActivity(intent);
+    private void setFragment (Fragment fragment, Class fragmentClass){
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
     }
+
+
+
 }

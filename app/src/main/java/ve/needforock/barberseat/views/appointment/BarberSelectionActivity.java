@@ -41,8 +41,8 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barber_selection);
 
-        barbers = (ArrayList<Barber>) getIntent().getSerializableExtra(JobSelectionActivity.BARBERS);
-        job  = (Job) getIntent().getSerializableExtra(JobSelectionActivity.SELECTED_JOB);
+        barbers = (ArrayList<Barber>) getIntent().getSerializableExtra(JobFragment.BARBERS);
+        job  = (Job) getIntent().getSerializableExtra(JobFragment.SELECTED_JOB);
 
 
         recyclerView = findViewById(R.id.barberRv);
