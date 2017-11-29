@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.siyamed.shapeimageview.CircularImageView;
+
 import java.util.List;
 
 import ve.needforock.barberseat.R;
@@ -38,11 +40,19 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
         Barber barber = barberList.get(position);
         holder.barber.setText(barber.getName());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.see.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Barber auxBarber = barberList.get(position);
-                barberListener.barberClicked(auxBarber.getUid());
+                barberListener.seeClicked(auxBarber.getUid());
+            }
+        });
+
+        holder.reserve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Barber auxBarber = barberList.get(position);
+                barberListener.reserveClicked(auxBarber.getUid());
             }
         });
 
@@ -54,12 +64,17 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
     }
 
     public static class BarberHolder extends RecyclerView.ViewHolder{
-        private TextView barber;
+        private TextView barber, see, reserve;
+        private CircularImageView barberPhoto;
+
 
         public BarberHolder(View itemView) {
             super(itemView);
 
             barber = itemView.findViewById(R.id.barberTv);
+            barberPhoto = itemView.findViewById(R.id.barberPhotoCiv);
+            see = itemView.findViewById(R.id.seeTv);
+            reserve = itemView.findViewById(R.id.reserveTv);
 
 
 

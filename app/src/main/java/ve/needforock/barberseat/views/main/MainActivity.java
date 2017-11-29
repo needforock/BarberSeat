@@ -18,8 +18,6 @@ import android.view.View;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import ve.needforock.barberseat.R;
@@ -30,7 +28,6 @@ import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.data.Queries;
 import ve.needforock.barberseat.models.Appointment;
 import ve.needforock.barberseat.models.Barber;
-import ve.needforock.barberseat.models.BarberDay;
 import ve.needforock.barberseat.models.Job;
 import ve.needforock.barberseat.views.appointment.JobSelectionActivity;
 import ve.needforock.barberseat.views.appointment_detail.AppointmentDetailActivity;
@@ -81,74 +78,22 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
-        Calendar finalCal = Calendar.getInstance();
-
-        Appointment appointment1 = new Appointment();
-        appointment1.setBarberUid("456");
-        appointment1.setBarberName("pedrito perez");
-        appointment1.setUserUID(customerUid);
-
-
-
-
-
-        finalCal.set(117 + 1900, 10, 12, 13, 0);
-        Date appDate =  finalCal.getTime();
-        appointment1.setDate(appDate);
-
-        BarberDay barberDay1 = new BarberDay();
-        barberDay1.setThirteen(true);
-        barberDay1.setDate(appDate);
-
-        /*String appointKey = new Nodes().user(customerUid).child("appointments").push().getKey();
-        new Nodes().user(customerUid).child("appointments").child(appointKey).setValue(appointment1);
-        new Nodes().appointments(appointment1.getBarberUid()).child(appointKey).setValue(appointment1);
-        new Nodes().appointmentDay(appointment1.getBarberUid())
-                .child(String.valueOf(finalCal.get(finalCal.YEAR)))
-                .child(String.valueOf(finalCal.get(finalCal.MONTH)))
-                .child(String.valueOf(finalCal.get(finalCal.DAY_OF_MONTH)))
-                .setValue(barberDay1);*/
-
-        Calendar finalCal2 = Calendar.getInstance();
-        Appointment appointment2 = new Appointment();
-        appointment2.setBarberUid("456");
-        appointment2.setBarberName("pedrito perez");
-        appointment2.setUserUID(customerUid);
-        finalCal2.set(118 + 1900, 11, 18, 9, 0);
-        Date appDate2 =  finalCal2.getTime();
-        appointment2.setDate(appDate2);
-
-        BarberDay barberDay2 = new BarberDay();
-        barberDay2.setNine(true);
-        barberDay2.setDate(appDate2);
-
-       /* String appointKey2 = new Nodes().user(customerUid).child("appointments").push().getKey();
-        new Nodes().user(customerUid).child("appointments").child(appointKey2).setValue(appointment2);
-        new Nodes().appointments(appointment2.getBarberUid()).child(appointKey2).setValue(appointment2);
-        new Nodes().appointmentDay(appointment1.getBarberUid())
-                .child(String.valueOf(finalCal2.get(finalCal2.YEAR)))
-                .child(String.valueOf(finalCal2.get(finalCal2.MONTH)))
-                .child(String.valueOf(finalCal2.get(finalCal2.DAY_OF_MONTH)))
-                .setValue(barberDay2);*/
-
-
         Job shave = new Job();
-        shave.setName("shave");
+        shave.setName("Rasurado");
         List<Barber> barbers = new ArrayList<>();
         barbers.add(newBarber);
         barbers.add(newBarber2);
         shave.setBarberList(barbers);
-        new Nodes().jobs().child("shave").setValue(shave);
+        new Nodes().jobs().child("rasurado").setValue(shave);
 
 
         Job cut = new Job();
-        cut.setName("cut");
+        cut.setName("Corte");
         List<Barber> barbers2 = new ArrayList<>();
         barbers2.add(newBarber);
         barbers2.add(newBarber2);
         cut.setBarberList(barbers2);
-        new Nodes().jobs().child("cut").setValue(cut);
+        new Nodes().jobs().child("corte").setValue(cut);
 
 
 

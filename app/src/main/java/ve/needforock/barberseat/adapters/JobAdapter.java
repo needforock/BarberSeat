@@ -33,9 +33,9 @@ public class JobAdapter extends FirebaseRecyclerAdapter<Job, JobAdapter.JobHolde
     protected void populateViewHolder(final JobHolder viewHolder, Job model, int position) {
         viewHolder.job.setText(model.getName());
 
-        if(model.getName().equals("cut")){
+        if(model.getName().equals("Corte")){
             Picasso.with(context).load(R.mipmap.cut).centerCrop().fit().into(viewHolder.jobPic);
-        }else if(model.getName().equals("shave")){
+        }else if(model.getName().equals("Rasurado")){
             Picasso.with(context).load(R.mipmap.shave).centerCrop().fit().into(viewHolder.jobPic);
         }
 

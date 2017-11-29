@@ -8,7 +8,7 @@
     tools:context="ve.needforock.barberseat.views.appointment.JobSelectionActivity"
     android:orientation="vertical"
     tools:showIn="@layout/activity_form"
-    android:theme="@style/AppTheme">
+    android:background="@color/colorBackground">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/jobRv"

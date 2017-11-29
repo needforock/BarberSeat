@@ -6,5 +6,6 @@ package ve.needforock.barberseat.adapters;
 
 public interface BarberListener {
 
-    void barberClicked(String barberUid);
+    void reserveClicked(String barberUid);
+    void seeClicked(String barberUid);
 }

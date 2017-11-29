@@ -49,6 +49,8 @@ public class AppointmentToFireBase {
                 Barber auxBarber = dataSnapshot.getValue(Barber.class);
                 Log.d("Barbero", auxBarber.getName());
                 appointment.setBarberName(auxBarber.getName());
+
+
             }
 
             @Override
@@ -73,56 +75,8 @@ public class AppointmentToFireBase {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 BarberDay auxBarberDay = dataSnapshot.getValue(BarberDay.class);
-
-                if(hour.equals("9:00") && !auxBarberDay.isNine()){
-                    auxBarberDay.setNine(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("10:00") && !auxBarberDay.isTen()){
-                    auxBarberDay.setTen(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("11:00") && !auxBarberDay.isEleven()){
-                    auxBarberDay.setEleven(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("12:00") && !auxBarberDay.isTwelve()){
-                    auxBarberDay.setTwelve(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("13:00") && !auxBarberDay.isThirteen()){
-                    auxBarberDay.setThirteen(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("14:00") && !auxBarberDay.isTwelve()){
-                    auxBarberDay.setFourteen(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("15:00") && !auxBarberDay.isFifteen()){
-                    auxBarberDay.setFifteen(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("16:00")&& !auxBarberDay.isSixteen()){
-                    auxBarberDay.setSixteen(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("17:00") && !auxBarberDay.isSeventeen()){
-                    auxBarberDay.setSeventeen(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("18:00")&& !auxBarberDay.isEightteen()){
-                    auxBarberDay.setEightteen(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("19:00") && !auxBarberDay.isNinteen()){
-                    auxBarberDay.setNinteen(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                if(hour.equals("20:00") && !auxBarberDay.isTwenty()){
-                    auxBarberDay.setTwenty(true);
-                    uploadAppointment(appointment, barberUid, customerUid);
-                }
-                ref.setValue(auxBarberDay);
+                ref.child(hour).setValue(true);
+                uploadAppointment(appointment, barberUid, customerUid);
             }
 
             @Override
@@ -137,5 +91,6 @@ public class AppointmentToFireBase {
         appointment.setKey(appointKey);
         new Nodes().appointments(barberUid).child(appointKey).setValue(appointment);
         new Nodes().user(customerUid).child("appointments").child(appointKey).setValue(appointment);
+
     }
 }

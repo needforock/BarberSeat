@@ -1,9 +1,11 @@
 package ve.needforock.barberseat.views.appointment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -13,22 +15,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.adapters.DayAdapter;
 import ve.needforock.barberseat.adapters.DayListener;
 import ve.needforock.barberseat.data.AppointmentToFireBase;
 import ve.needforock.barberseat.data.Nodes;
-import ve.needforock.barberseat.models.BarberDay;
 import ve.needforock.barberseat.models.Job;
 
 
 
-public class DayView extends AppCompatActivity implements DayListener{
+public class DayView extends AppCompatActivity implements DayListener, CheckHourCallBack{
 
     private RecyclerView recyclerView;
     private DayAdapter dayAdapter;
@@ -36,23 +37,17 @@ public class DayView extends AppCompatActivity implements DayListener{
     private Job job;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_view);
-
        barberUid = getIntent().getStringExtra(BarberSelectionActivity.BARBER_UID);
         final Date date = new Date(getIntent().getLongExtra(BarberSelectionActivity.SELECTED_DATE, -1));
 
         job = (Job) getIntent().getSerializableExtra(BarberSelectionActivity.JOB );
         jobName = job.getName();
-
-
-
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-
         final DatabaseReference barberAppDay = new Nodes().appointmentDay(barberUid)
                 .child(String.valueOf(cal.get(cal.YEAR)))
                 .child(String.valueOf(cal.get(cal.MONTH)))
@@ -61,52 +56,26 @@ public class DayView extends AppCompatActivity implements DayListener{
         barberAppDay.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Boolean> map = new HashMap<>();
                 if (dataSnapshot != null) {
-                    BarberDay barberDay = dataSnapshot.getValue(BarberDay.class);
 
-                    if(barberDay!=null){
-                        List<Boolean> hours = new ArrayList<>();
-                        hours.add(barberDay.isNine());
-                        hours.add(barberDay.isTen());
-                        hours.add(barberDay.isEleven());
-                        hours.add(barberDay.isTwelve());
-                        hours.add(barberDay.isThirteen());
-                        hours.add(barberDay.isFourteen());
-                        hours.add(barberDay.isFifteen());
-                        hours.add(barberDay.isSixteen());
-                        hours.add(barberDay.isSeventeen());
-                        hours.add(barberDay.isEightteen());
-                        hours.add(barberDay.isNinteen());
-                        hours.add(barberDay.isTwenty());
-                        recyclerView = findViewById(R.id.hourRv);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                        recyclerView.setLayoutManager(linearLayoutManager);
-                        dayAdapter = new DayAdapter(date,hours, DayView.this);
-                        recyclerView.setAdapter(dayAdapter);
-                    }else{
-                        BarberDay barberDay1 = new BarberDay();
-                        barberDay1.setDate(date);
-                        barberAppDay.setValue(barberDay1);
-                        List<Boolean> hours = new ArrayList<>();
-                        for (int i = 0; i < 12; i++) {
-                            hours.add(i, false);
+                        for (DataSnapshot children : dataSnapshot.getChildren()) {
+                            map.put(children.getKey(), children.getValue(Boolean.class));
                         }
-
-                        recyclerView = findViewById(R.id.hourRv);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                        recyclerView.setLayoutManager(linearLayoutManager);
-                        dayAdapter = new DayAdapter(date, hours, DayView.this);
-                        recyclerView.setAdapter(dayAdapter);
-                    }
-
-                }else{
-                    Toast.makeText(DayView.this, "No hay dia", Toast.LENGTH_SHORT).show();
                 }
+                recyclerView = findViewById(R.id.hourRv);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(linearLayoutManager);
+                dayAdapter = new DayAdapter(date, map, DayView.this);
+                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                        linearLayoutManager.getOrientation());
+                recyclerView.addItemDecoration(dividerItemDecoration);
+                recyclerView.setAdapter(dayAdapter);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(DayView.this, "Problema de Conexion", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -115,6 +84,11 @@ public class DayView extends AppCompatActivity implements DayListener{
 
     @Override
     public void clickedHour(final String hour, final Date date) {
+        new CheckHourPresenter(this, this).checkHour(hour, date, barberUid);
+    }
+
+    @Override
+    public void available(final String hour, final Date date) {
         // 1. Instantiate an AlertDialog.Builder with its constructor
         final AlertDialog.Builder builder = new AlertDialog.Builder(DayView.this);
         Calendar cal = Calendar.getInstance();
@@ -132,8 +106,11 @@ public class DayView extends AppCompatActivity implements DayListener{
         // Add the buttons
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            new AppointmentToFireBase().SaveAppointment(DayView.this, barberUid,date,hour, jobName);
-            finish();
+                new AppointmentToFireBase().SaveAppointment(DayView.this, barberUid,date,hour, jobName);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+
+                finish();
 
             }
         });
@@ -146,5 +123,14 @@ public class DayView extends AppCompatActivity implements DayListener{
 // 3. Get the AlertDialog from create()
         AlertDialog dialog = builder.create();
         dialog.show();
+
+    }
+
+   @Override
+    public void noAvailable() {
+        Intent intent = new Intent();
+        setResult(RESULT_CANCELED, intent);
+        Toast.makeText(this, "Hora no Disponible, Seleccione otra Hora", Toast.LENGTH_SHORT).show();
+
     }
 }

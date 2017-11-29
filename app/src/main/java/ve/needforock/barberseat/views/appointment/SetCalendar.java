@@ -16,10 +16,11 @@ import com.roomorama.caldroid.CaldroidListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.Nodes;
-import ve.needforock.barberseat.models.BarberDay;
 
 /**
  * Created by Soporte on 14-Nov-17.
@@ -30,6 +31,7 @@ public class SetCalendar {
 
     Calendar cal = Calendar.getInstance();
     SelectedDateCallBack selectedDateCallBack;
+    Context context;
 
     public SetCalendar(SelectedDateCallBack selectedDateCallBack) {
         this.selectedDateCallBack = selectedDateCallBack;
@@ -65,11 +67,16 @@ public class SetCalendar {
     }
 
 
-    public void refreshData(Calendar cal, String barberUid, final Context context, final CaldroidFragment dialogCaldroidFragment) {
+    public void refreshData(final Calendar cal, String barberUid, final Context context, final CaldroidFragment dialogCaldroidFragment) {
+
+        final int year = cal.get(cal.YEAR);
+        final int month = cal.get(cal.MONTH);
 
         DatabaseReference barberAppMonth = new Nodes().appointmentDay(barberUid)
-                .child(String.valueOf(cal.get(cal.YEAR)))
-                .child(String.valueOf(cal.get(cal.MONTH)));
+                .child(String.valueOf(year))
+                .child(String.valueOf(month));
+
+
 
 
         barberAppMonth.addValueEventListener(new ValueEventListener() {
@@ -77,20 +84,19 @@ public class SetCalendar {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
                     String day;
-                    for (int i = 0; i < 32; i++) {
+                    for (int i = 1; i < 31; i++) {
                         day = String.valueOf(i);
-                        BarberDay barberDay = dataSnapshot.child(day).getValue(BarberDay.class);
-                        if (barberDay != null) {
-                            if (barberDay != null) {
-                                boolean fullDay = checkDay(barberDay);
-                                if (fullDay) {
-                                    setFullDayColor(dialogCaldroidFragment, barberDay.getDate());
-                                } else {
-                                    setGreenDayColor(dialogCaldroidFragment, barberDay);
-                                }
-                            } else {
-                                Toast.makeText(context, "Dia Nulo", Toast.LENGTH_SHORT).show();
-                            }
+                        Map<String, Boolean> map = new HashMap<>();
+                        for (DataSnapshot children : dataSnapshot.child(day).getChildren()) {
+                            map.put(children.getKey(), children.getValue(Boolean.class));
+
+                        }
+                        cal.set(year, month, i);
+                        int hoursCount = checkDay( map);
+                        if (hoursCount == 12) {
+                            setFullDayColor(dialogCaldroidFragment, cal.getTime());
+                        } else if (hoursCount >0 && hoursCount<12){
+                            setGreenDayColor(dialogCaldroidFragment, cal.getTime(), map);
                         }
                     }
                 } else {
@@ -108,8 +114,9 @@ public class SetCalendar {
     public void setFullDayColor(CaldroidFragment dialogCaldroidFragment, Date date) {
 
         Date redDate = date;
+
         if (dialogCaldroidFragment != null) {
-            ColorDrawable red = new ColorDrawable(Color.RED);
+            ColorDrawable red = new ColorDrawable(Color.parseColor("#b7ff0000"));
             dialogCaldroidFragment.setBackgroundDrawableForDate(red, redDate);
             dialogCaldroidFragment.setTextColorForDate(R.color.white, redDate);
         }
@@ -117,35 +124,34 @@ public class SetCalendar {
 
     }
 
-    public void setGreenDayColor(CaldroidFragment dialogCaldroidFragment, BarberDay barberDay ) {
+    public void setGreenDayColor(CaldroidFragment dialogCaldroidFragment, Date date, Map<String, Boolean> map ) {
 
-        Date greenDate = barberDay.getDate();
+        Date greenDate = date;
+
 
         if (dialogCaldroidFragment != null) {
-            if(barberDay.isNine() || barberDay.isTen() || barberDay.isEleven() || barberDay.isTwelve()
-                    || barberDay.isThirteen() || barberDay.isFourteen() || barberDay.isFifteen() ||
-                    barberDay.isSixteen() || barberDay.isSeventeen() || barberDay.isEightteen() ||
-                    barberDay.isNinteen() || barberDay.isTwenty()){
-                ColorDrawable green = new ColorDrawable(Color.GREEN);
+
+
+                ColorDrawable green = new ColorDrawable(Color.parseColor("#a4ff96"));
                 dialogCaldroidFragment.setBackgroundDrawableForDate(green, greenDate);
                 dialogCaldroidFragment.setTextColorForDate(R.color.white, greenDate);
-            }
+
 
         }
         dialogCaldroidFragment.refreshView();
 
     }
 
-    public boolean checkDay(BarberDay barberDay) {
-        if (barberDay.isNine() && barberDay.isTen() && barberDay.isEleven() && barberDay.isTwelve()
-                && barberDay.isThirteen() && barberDay.isFourteen() && barberDay.isFifteen() &&
-                barberDay.isSixteen() && barberDay.isSeventeen() && barberDay.isEightteen() &&
-                barberDay.isNinteen() && barberDay.isTwenty()) {
-            return true;
-        } else {
-            return false;
+    public int checkDay( Map<String, Boolean> map) {
+
+        int i = 0;
+        for (String key : map.keySet()) {
+            if (map.get(key)) {
+                i++;
+            }
         }
 
+        return i;
     }
 
 
