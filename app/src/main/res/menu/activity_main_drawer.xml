@@ -5,11 +5,11 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_appointments"
             android:icon="@mipmap/ic_date_range_white_24dp"
             android:title="Mis Reservas" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_book"
             android:icon="@mipmap/ic_content_cut_white_24dp"
             android:title="Reservar" />
         <item
@@ -20,14 +20,14 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@mipmap/ic_account_box_white_24dp"
+            android:title="Mi Perfil" />
     </group>
 
-    <item android:title="Perfil">
+    <item android:title="">
         <menu>
-            <item
-                android:id="@+id/nav_profile"
-                android:icon="@mipmap/ic_account_box_white_24dp"
-                android:title="Mi Perfil" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@mipmap/ic_power_settings_new_white_24dp"

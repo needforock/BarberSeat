@@ -25,6 +25,7 @@ import ve.needforock.barberseat.adapters.DayAdapter;
 import ve.needforock.barberseat.adapters.DayListener;
 import ve.needforock.barberseat.data.AppointmentToFireBase;
 import ve.needforock.barberseat.data.Nodes;
+import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Job;
 
 
@@ -33,25 +34,37 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
 
     private RecyclerView recyclerView;
     private DayAdapter dayAdapter;
-    private String barberUid, jobName;
+    private String barberUid, jobName, day, month, year, realMonth;
     private Job job;
+    private String barberName;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_view);
-       barberUid = getIntent().getStringExtra(BarberSelectionActivity.BARBER_UID);
+       barberUid = getIntent().getStringExtra(BarberSelectionActivity.BARBER1_UID);
         final Date date = new Date(getIntent().getLongExtra(BarberSelectionActivity.SELECTED_DATE, -1));
+
+
 
         job = (Job) getIntent().getSerializableExtra(BarberSelectionActivity.JOB );
         jobName = job.getName();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
+        year = String.valueOf(cal.get(cal.YEAR));
+        month = String.valueOf(cal.get(cal.MONTH));
+        realMonth = String.valueOf(cal.get(cal.MONTH)+1);
+        day = String.valueOf(cal.get(cal.DAY_OF_MONTH));
+
+        getSupportActionBar().setTitle(jobName + " el " + day + "-" + realMonth + "-" + year);
+
+
+
         final DatabaseReference barberAppDay = new Nodes().appointmentDay(barberUid)
-                .child(String.valueOf(cal.get(cal.YEAR)))
-                .child(String.valueOf(cal.get(cal.MONTH)))
-                .child(String.valueOf(cal.get(cal.DAY_OF_MONTH)));
+                .child(year)
+                .child(month)
+                .child(day);
 
         barberAppDay.addValueEventListener(new ValueEventListener() {
             @Override
@@ -79,6 +92,23 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
             }
         });
 
+
+        DatabaseReference barber = new Nodes().barber(barberUid);
+        barber.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Barber auxBarber = dataSnapshot.getValue(Barber.class);
+                barberName = auxBarber.getName();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+
     }
 
 
@@ -91,20 +121,20 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
     public void available(final String hour, final Date date) {
         // 1. Instantiate an AlertDialog.Builder with its constructor
         final AlertDialog.Builder builder = new AlertDialog.Builder(DayView.this);
-        Calendar cal = Calendar.getInstance();
+       /* Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         String day = String.valueOf(cal.get(cal.DAY_OF_MONTH));
         String month = String.valueOf(cal.get(cal.MONTH)+1);
         String year = String.valueOf(cal.get(cal.YEAR));
-
+*/
 
 // 2. Chain together various setter methods to set the dialog characteristics
-        builder.setMessage(day + "-" + month + "-" + year + " a las " + hour)
-                .setTitle("Desea reservar la siguiente hora?");
+        builder.setTitle("Confirma tu reserva:")
+                .setMessage("¿Desea reservar las " + hour + " horas del dia " + day + "-" +realMonth + "-" + year + " para " + jobName + " con " + barberName + "?"  );
 
 
         // Add the buttons
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("RESERVAR", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 new AppointmentToFireBase().SaveAppointment(DayView.this, barberUid,date,hour, jobName);
                 Intent intent = new Intent();
@@ -114,7 +144,7 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
 
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
             }

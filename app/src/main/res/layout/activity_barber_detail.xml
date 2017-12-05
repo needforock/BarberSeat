@@ -39,6 +39,25 @@
         android:layout_below="@+id/detailNameTv"
         android:layout_centerHorizontal="true"/>
 
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/detailPhoneTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Especialidades: "/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/specialtiesTv"/>
+
+    </LinearLayout>
+
 
 
 

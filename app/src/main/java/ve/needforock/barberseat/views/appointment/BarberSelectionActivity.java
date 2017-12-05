@@ -25,7 +25,7 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
 
     public static final String JOB = "ve.needforock.barberseat.views.appointment.KEY.JOB";
     public static final String SELECTED_DATE = "ve.needforock.barberseat.views.KEY.appointment.SELECTED_DATE" ;
-    public static final String BARBER_UID = "ve.needforock.barberseat.views.KEY.appointment.BARBER_UID";
+    public static final String BARBER1_UID = "ve.needforock.barberseat.views.KEY.appointment.BARBER1_UID";
     private static final int RC_CODE = 363;
 
 
@@ -43,6 +43,8 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
 
         barbers = (ArrayList<Barber>) getIntent().getSerializableExtra(JobFragment.BARBERS);
         job  = (Job) getIntent().getSerializableExtra(JobFragment.SELECTED_JOB);
+
+        getSupportActionBar().setTitle("Barberos que hacen " + job.getName());
 
 
         recyclerView = findViewById(R.id.barberRv);
@@ -89,7 +91,7 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
     @Override
     public void seeClicked(String barberUid) {
         Intent intent = new Intent(BarberSelectionActivity.this, BarberDetailActivity.class);
-        intent.putExtra(BARBER_UID, barberUid);
+        intent.putExtra(BARBER1_UID, barberUid);
         startActivity(intent);
     }
 
@@ -100,7 +102,7 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
 
         Intent intent = new Intent(BarberSelectionActivity.this, DayView.class);
         intent.putExtra(SELECTED_DATE, date.getTime());
-        intent.putExtra(BARBER_UID, barberUid);
+        intent.putExtra(BARBER1_UID, barberUid);
         intent.putExtra(JOB, job);
         startActivityForResult(intent, RC_CODE);
 

@@ -15,6 +15,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.DeleteAppointment;
 import ve.needforock.barberseat.data.Nodes;
@@ -22,9 +25,11 @@ import ve.needforock.barberseat.models.Appointment;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
 
-public class AppointmentDetailActivity extends AppCompatActivity {
+public class AppointmentDetailActivity extends AppCompatActivity implements DayCallBack{
 
     private Appointment appointment;
+    private String year, month, day, hour, realMonth;
+    private TextView dateTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +40,26 @@ public class AppointmentDetailActivity extends AppCompatActivity {
 
         appointment = (Appointment) getIntent().getSerializableExtra(AppointmentFragment.APPOINTMENT);
 
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Detalle de Reserva");
 
         final TextView name = findViewById(R.id.barberNameTv);
         final TextView phone = findViewById(R.id.barberPhoneTv);
         final TextView job = findViewById(R.id.appJobTv);
-        final TextView date = findViewById(R.id.appointmentDateTv);
+        dateTv = findViewById(R.id.appointmentDateTv);
 
         String barberUid = appointment.getBarberUid();
+
+
+        Date date = appointment.getDate();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        year = String.valueOf(cal.get(cal.YEAR));
+        month = String.valueOf(cal.get(cal.MONTH));
+        realMonth = String.valueOf(cal.get(cal.MONTH)+1);
+        day = String.valueOf(cal.get(cal.DAY_OF_MONTH));
+
+        new DayValidation(AppointmentDetailActivity.this).validate(cal.get(cal.DAY_OF_WEEK));
+
 
         DatabaseReference barber = new Nodes().barber(barberUid);
         barber.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -52,7 +69,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                 name.setText(auxBarber.getName());
                 phone.setText(auxBarber.getPhone());
                 job.setText(appointment.getJob());
-                date.setText(appointment.getDate().toString());
+
             }
 
             @Override
@@ -93,4 +110,8 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void dayInString(String dayString) {
+        dateTv.setText(dayString + " " + day + "-" + realMonth + "-" + year);
+    }
 }

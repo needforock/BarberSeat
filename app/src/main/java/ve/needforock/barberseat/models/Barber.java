@@ -1,15 +1,34 @@
 package ve.needforock.barberseat.models;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Created by Soporte on 13-Nov-17.
  */
 
 public class Barber implements Serializable{
-    String mail, uid, name, phone;
+    private String mail, uid, name, phone;
+    private String photo;
+    private Map<String, String> jobs;
 
     public Barber() {
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public Map<String, String> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(Map<String, String> jobs) {
+        this.jobs = jobs;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getMail() {

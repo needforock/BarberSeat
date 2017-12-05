@@ -7,9 +7,9 @@ import java.util.Date;
  */
 
 public class BarberDay {
-    boolean nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eightteen, ninteen, twenty;
-    boolean fullDay;
-    Date date;
+    private boolean nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eightteen, ninteen, twenty;
+    private boolean fullDay;
+    private Date date;
 
     public BarberDay() {
     }

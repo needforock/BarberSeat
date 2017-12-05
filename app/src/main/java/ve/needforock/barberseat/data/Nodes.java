@@ -39,4 +39,8 @@ public class Nodes {
         return root.child("users").child(userUid).child("appointments");
     }
 
+    public DatabaseReference barberRating(String barberUid){
+        return root.child("barber_rating").child(barberUid);
+    }
+
 }

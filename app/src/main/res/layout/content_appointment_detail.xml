@@ -15,7 +15,7 @@
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:src="@mipmap/ic_launcher_round"
-        app:siBorderWidth="6dp"
+        app:siBorderWidth="3dp"
         app:siBorderColor="@color/colorPrimaryDark"/>
 
     <TextView
@@ -23,20 +23,11 @@
         android:textSize="24sp"
         android:textAlignment="center"
         android:padding="16dp"
-        android:id="@+id/barberNameTv"
-        android:text="Nombre"
+        android:id="@+id/appJobTv"
+        android:text="Trabajo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/barberAvatarCiv"
-        android:layout_centerHorizontal="true"/>
-    <TextView
-        android:textAlignment="center"
-        android:padding="8dp"
-        android:id="@+id/barberPhoneTv"
-        android:text="Telefono"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/barberNameTv"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -46,17 +37,29 @@
         android:text="Fecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/barberPhoneTv"
+        android:layout_below="@+id/appJobTv"
         android:layout_centerHorizontal="true"/>
 
     <TextView
         android:textAlignment="center"
         android:padding="8dp"
-        android:id="@+id/appJobTv"
-        android:text="Trabajo"
+        android:id="@+id/barberNameTv"
+        android:text="Barbero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/appointmentDateTv"
+        android:layout_centerHorizontal="true"/>
+
+
+
+    <TextView
+        android:textAlignment="center"
+        android:padding="8dp"
+        android:id="@+id/barberPhoneTv"
+        android:text="Telefono"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/barberNameTv"
         android:layout_centerHorizontal="true"/>
 
 

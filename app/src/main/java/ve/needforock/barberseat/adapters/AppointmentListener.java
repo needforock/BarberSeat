@@ -8,5 +8,8 @@ import ve.needforock.barberseat.models.Appointment;
 
 public interface AppointmentListener {
 
-    void appointmentClicked(Appointment appointment);
+
+    void deleteClicked(Appointment appointment);
+    void viewClicked(Appointment appointment);
+    void barberClicked(String barberUid);
 }

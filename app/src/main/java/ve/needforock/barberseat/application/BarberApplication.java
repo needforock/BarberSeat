@@ -15,5 +15,8 @@ public class BarberApplication extends Application {
         super.onCreate();
 
         FirebaseApp.initializeApp(this);
+        new Offline().setPersistence();
     }
+
+
 }

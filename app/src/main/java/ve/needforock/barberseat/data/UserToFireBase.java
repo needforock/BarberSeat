@@ -16,6 +16,20 @@ public class UserToFireBase {
         customer.setName(currentUser.getCurrentUser().getDisplayName());
         customer.setPhoto(String.valueOf(userImageUri));
         customer.setUid(currentUser.getUid());
+
+        String key = currentUser.getUid();
+        new Nodes().user(key).child("details").setValue(customer);
+
+    }
+
+    public void phoneToFireBase(Uri userImageUri , String phone){
+        CurrentUser currentUser = new CurrentUser();
+        Customer customer = new Customer();
+        customer.setEmail(currentUser.userEmail());
+        customer.setName(currentUser.getCurrentUser().getDisplayName());
+        customer.setPhoto(String.valueOf(userImageUri));
+        customer.setUid(currentUser.getUid());
+        customer.setPhone(phone);
         String key = currentUser.getUid();
         new Nodes().user(key).child("details").setValue(customer);
 

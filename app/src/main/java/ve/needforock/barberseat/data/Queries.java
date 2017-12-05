@@ -32,4 +32,8 @@ public class Queries {
         return new Queries().AppmntsMonth(barberUid, year, month).child(String.valueOf(day));
     }
 
+    public DatabaseReference UserDetails(String userUid){
+        return new Nodes().user(userUid).child("details");
+    }
+
 }
