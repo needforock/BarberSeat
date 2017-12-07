@@ -13,13 +13,13 @@
             android:icon="@mipmap/ic_content_cut_white_24dp"
             android:title="Reservar" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_mostBooked"
+            android:icon="@mipmap/ic_trending_up_black_24dp"
+            android:title="Mas Reservados" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:icon="@mipmap/ic_stars_black_24dp"
+            android:title="Mejor Evaluados" />
         <item
             android:id="@+id/nav_profile"
             android:icon="@mipmap/ic_account_box_white_24dp"

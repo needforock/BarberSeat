@@ -2,6 +2,7 @@ package ve.needforock.barberseat.views.barber_detail;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -17,10 +18,12 @@ import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
 import ve.needforock.barberseat.views.appointment.BarberSelectionActivity;
 
-public class BarberDetailActivity extends AppCompatActivity {
+public class BarberDetailActivity extends AppCompatActivity implements RatingCallBack {
 
     private String barberUid1,barberUid2, specialties;
     private TextView name, phone, specialtiesTv;
+    private  RatingBar ratingBar;
+    private  float ratingValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +41,7 @@ public class BarberDetailActivity extends AppCompatActivity {
         phone = findViewById(R.id.detailPhoneTv);
         specialtiesTv = findViewById(R.id.specialtiesTv);
         specialties="";
-
-
+        ratingBar = findViewById(R.id.ratingbar);
 
         if(barberUid2 == null){
             DatabaseReference barber = new Nodes().barber(barberUid1);
@@ -57,6 +59,13 @@ public class BarberDetailActivity extends AppCompatActivity {
 
                 }
             });
+
+            new RatingPresenter(BarberDetailActivity.this).checkRateNoNull(barberUid1);
+            checkJobs(barberUid1);
+
+
+
+
         }
 
         if(barberUid1 == null){
@@ -75,17 +84,16 @@ public class BarberDetailActivity extends AppCompatActivity {
 
                 }
             });
+
+            new RatingPresenter(BarberDetailActivity.this).checkRateNoNull(barberUid2);
+            checkJobs(barberUid2);
         }
-
-        checkJobs(barberUid1, barberUid2);
-
-
 
 
     }
 
-    public void checkJobs(final String barberUid1, final String barberUid2){
-        DatabaseReference cut = new Nodes().barber(barberUid1);
+    public void checkJobs(final String barberUid){
+        DatabaseReference cut = new Nodes().barber(barberUid);
         cut.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -111,26 +119,23 @@ public class BarberDetailActivity extends AppCompatActivity {
             }
         });
 
-       /* DatabaseReference shave = new Nodes().jobs().child("rasurado");
-        shave.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Job auxJob = dataSnapshot.getValue(Job.class);
-                List<Barber> barberList = auxJob.getBarberList();
-                for (Barber barber: barberList) {
-                    if(barber.getUid().equals(barberUid1) || barber.getUid().equals(barberUid2));
-                    specialties = specialties + auxJob.getName();
+    }
+
+    @Override
+    public void ratingSuccess() {
 
 
-                }
-                specialtiesTv.setText(specialties);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    }
 
-            }
-        });*/
+    @Override
+    public void rateChecked(float rating) {
+        ratingBar.setRating(rating);
+    }
+
+    @Override
+    public void ratingNoSuccess() {
+
 
     }
 }

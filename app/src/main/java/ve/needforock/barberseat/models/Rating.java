@@ -1,12 +1,16 @@
 package ve.needforock.barberseat.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Soporte on 05-Dec-17.
  */
 
 public class Rating {
     private int ratingTimes;
-    private long rating;
+    private float rating;
+    private Map<String, Boolean> stars = new HashMap<>();
 
     public Rating() {
     }
@@ -19,11 +23,19 @@ public class Rating {
         this.ratingTimes = ratingTimes;
     }
 
-    public long getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(long rating) {
+    public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public Map<String, Boolean> getStars() {
+        return stars;
+    }
+
+    public void setStars(Map<String, Boolean> stars) {
+        this.stars = stars;
     }
 }

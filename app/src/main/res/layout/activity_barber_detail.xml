@@ -40,6 +40,7 @@
         android:layout_centerHorizontal="true"/>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/detailPhoneTv"
         android:layout_width="wrap_content"
@@ -56,8 +57,26 @@
             android:layout_height="wrap_content"
             android:id="@+id/specialtiesTv"/>
 
+
+
     </LinearLayout>
 
+    <RatingBar
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/ratingbar"
+        android:layout_below="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:maxHeight="48dp"
+        android:layout_marginLeft="-4dp"
+        android:layout_marginRight="-4dp"
+        android:theme="@style/customRatingBar"
+        android:numStars="5"
+        android:stepSize="0.1"
+        android:isIndicator="true"
+        />
 
 
 

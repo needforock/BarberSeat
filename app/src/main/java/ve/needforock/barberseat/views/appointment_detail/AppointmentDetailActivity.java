@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +25,15 @@ import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.models.Appointment;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
+import ve.needforock.barberseat.views.barber_detail.RatingCallBack;
+import ve.needforock.barberseat.views.barber_detail.RatingPresenter;
 
-public class AppointmentDetailActivity extends AppCompatActivity implements DayCallBack{
+public class AppointmentDetailActivity extends AppCompatActivity implements DayCallBack, RatingCallBack{
 
     private Appointment appointment;
     private String year, month, day, hour, realMonth;
     private TextView dateTv;
+    private RatingBar appointmentRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,7 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
         final TextView job = findViewById(R.id.appJobTv);
         dateTv = findViewById(R.id.appointmentDateTv);
 
-        String barberUid = appointment.getBarberUid();
+        final String barberUid = appointment.getBarberUid();
 
 
         Date date = appointment.getDate();
@@ -57,8 +61,18 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
         month = String.valueOf(cal.get(cal.MONTH));
         realMonth = String.valueOf(cal.get(cal.MONTH)+1);
         day = String.valueOf(cal.get(cal.DAY_OF_MONTH));
+        appointmentRating = findViewById(R.id.appointmentRating);
+
 
         new DayValidation(AppointmentDetailActivity.this).validate(cal.get(cal.DAY_OF_WEEK));
+
+
+        appointmentRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rate, boolean b) {
+                new RatingPresenter(AppointmentDetailActivity.this).rateBarber(barberUid, rate);
+            }
+        });
 
 
         DatabaseReference barber = new Nodes().barber(barberUid);
@@ -113,5 +127,22 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
     @Override
     public void dayInString(String dayString) {
         dateTv.setText(dayString + " " + day + "-" + realMonth + "-" + year);
+    }
+
+    @Override
+    public void ratingSuccess() {
+        appointmentRating.setIsIndicator(true);
+        Toast.makeText(this, "Evaluacion Realizada", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void rateChecked(float rating) {
+        appointmentRating.setRating(rating);
+    }
+
+    @Override
+    public void ratingNoSuccess() {
+        Toast.makeText(this, "No se puede evaluar mas de una vez", Toast.LENGTH_SHORT).show();
+
     }
 }

@@ -41,6 +41,7 @@ import ve.needforock.barberseat.data.UserToFireBase;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Customer;
 import ve.needforock.barberseat.models.Job;
+import ve.needforock.barberseat.models.Rating;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
 import ve.needforock.barberseat.views.appointment.JobFragment;
 import ve.needforock.barberseat.views.login.LoginActivity;
@@ -84,6 +85,15 @@ public class MainActivity extends AppCompatActivity
         map1.put(String.valueOf(System.currentTimeMillis()+1), "Rasurado");
         newBarber.setJobs(map1);
 
+        Rating rating = new Rating();
+        rating.setRatingTimes(0);
+        rating.setRating(0);
+        /*Map<String ,Boolean> stars = new HashMap<>();
+        stars.put("x", false);
+        rating.setStars(stars);
+        new Nodes().barberRating("456").setValue(rating);*/
+
+
 
 
         final Barber newBarber2 = new Barber();
@@ -91,6 +101,8 @@ public class MainActivity extends AppCompatActivity
         newBarber2.setUid("457");
         newBarber2.setName("Juanito Alimana");
         newBarber2.setJobs(map1);
+
+        //new RatingPresenter(MainActivity.this).rateBarber(newBarber2.getUid(), 0);
 
 
 
@@ -218,7 +230,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Reservar");
 
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_mostBooked) {
 
         } else if (id == R.id.nav_manage) {
 
@@ -256,7 +268,6 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
     }
-
 
 
 }
