@@ -45,6 +45,7 @@ import ve.needforock.barberseat.models.Rating;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
 import ve.needforock.barberseat.views.appointment.JobFragment;
 import ve.needforock.barberseat.views.login.LoginActivity;
+import ve.needforock.barberseat.views.top_rated.TopRatedFragment;
 import ve.needforock.barberseat.views.user_detail.UserDetailFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -232,7 +233,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_mostBooked) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.best_rated) {
+            fragmentClass = TopRatedFragment.class;
+            setFragment(fragment, fragmentClass);
+            getSupportActionBar().setTitle("Mejor Evaluados");
 
         } else if (id == R.id.nav_profile) {
             fragmentClass = UserDetailFragment.class;

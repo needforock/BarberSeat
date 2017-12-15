@@ -31,9 +31,10 @@ import ve.needforock.barberseat.views.barber_detail.RatingPresenter;
 public class AppointmentDetailActivity extends AppCompatActivity implements DayCallBack, RatingCallBack{
 
     private Appointment appointment;
-    private String year, month, day, hour, realMonth;
+    private String year, month, day, hour, realMonth, barberUid;
     private TextView dateTv;
     private RatingBar appointmentRating;
+    private float rate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +50,10 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
         final TextView name = findViewById(R.id.barberNameTv);
         final TextView phone = findViewById(R.id.barberPhoneTv);
         final TextView job = findViewById(R.id.appJobTv);
+        TextView isRated = findViewById(R.id.isRatedTv);
         dateTv = findViewById(R.id.appointmentDateTv);
 
-        final String barberUid = appointment.getBarberUid();
+        barberUid = appointment.getBarberUid();
 
 
         Date date = appointment.getDate();
@@ -66,11 +68,21 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
 
         new DayValidation(AppointmentDetailActivity.this).validate(cal.get(cal.DAY_OF_WEEK));
 
+        if(appointment.isRated()){
+            appointmentRating.setVisibility(View.GONE);
+            isRated.setVisibility(View.VISIBLE);
+            isRated.setText("Ya Evaluaste Esta Cita");
+        }else{
+            isRated.setVisibility(View.VISIBLE);
+            isRated.setText("Evalúa la calidad del servicio");
+        }
 
         appointmentRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
-            public void onRatingChanged(RatingBar ratingBar, float rate, boolean b) {
-                new RatingPresenter(AppointmentDetailActivity.this).rateBarber(barberUid, rate);
+            public void onRatingChanged(RatingBar ratingBar, float rateV, boolean b) {
+                rate = rateV;
+
+               new RatingPresenter(AppointmentDetailActivity.this).checkAppointmentIsRated(appointment);
             }
         });
 
@@ -144,5 +156,10 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
     public void ratingNoSuccess() {
         Toast.makeText(this, "No se puede evaluar mas de una vez", Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void doRating() {
+        new RatingPresenter(AppointmentDetailActivity.this).rateBarber(barberUid, rate);
     }
 }

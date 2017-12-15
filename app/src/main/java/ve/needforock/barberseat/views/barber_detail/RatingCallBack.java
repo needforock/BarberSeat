@@ -9,4 +9,5 @@ public interface RatingCallBack {
     void ratingSuccess();
     void rateChecked(float rating);
     void ratingNoSuccess();
+    void doRating();
 }

@@ -24,8 +24,8 @@ import ve.needforock.barberseat.views.barber_detail.BarberDetailActivity;
 public class BarberSelectionActivity extends AppCompatActivity implements BarberListener, SelectedDateCallBack {
 
     public static final String JOB = "ve.needforock.barberseat.views.appointment.KEY.JOB";
-    public static final String SELECTED_DATE = "ve.needforock.barberseat.views.KEY.appointment.SELECTED_DATE" ;
-    public static final String BARBER1_UID = "ve.needforock.barberseat.views.KEY.appointment.BARBER1_UID";
+    public static final String SELECTED_DATE = "ve.needforock.barberseat.views.appointment.KEY.SELECTED_DATE" ;
+    public static final String BARBER1_UID = "ve.needforock.barberseat.views.appointment.KEY.BARBER1_UID";
     private static final int RC_CODE = 363;
 
 

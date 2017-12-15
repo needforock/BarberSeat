@@ -115,7 +115,7 @@ public class AppointmentAdapter extends FirebaseRecyclerAdapter<Appointment, App
             circularImageView = itemView.findViewById(R.id.barberPhotoCiv);
             job = itemView.findViewById(R.id.jobTv);
             view = itemView.findViewById(R.id.viewTv);
-            delete = itemView.findViewById(R.id.deleteTv);
+            delete = itemView.findViewById(R.id.bookTv);
 
 
         }

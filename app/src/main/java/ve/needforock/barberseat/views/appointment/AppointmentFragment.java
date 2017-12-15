@@ -56,7 +56,7 @@ public class AppointmentFragment extends Fragment implements AppointmentListener
 
         final String customerUid = new CurrentUser().getUid();
 
-        Query query = new Queries().CustomerAppointments(customerUid);
+        Query query = new Queries().CustomerAppointments(customerUid).orderByChild("key");
 
 
         recyclerView = view.findViewById(R.id.appointmentRv);

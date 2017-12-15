@@ -15,6 +15,7 @@ import java.util.Map;
 
 import ve.needforock.barberseat.data.CurrentUser;
 import ve.needforock.barberseat.data.Nodes;
+import ve.needforock.barberseat.models.Appointment;
 import ve.needforock.barberseat.models.Rating;
 
 /**
@@ -25,7 +26,7 @@ public class RatingPresenter {
 
     private RatingCallBack ratingCallBack;
     private Context context;
-    private String userUid;
+
 
     public RatingPresenter(RatingCallBack ratingCallBack) {
         this.ratingCallBack = ratingCallBack;
@@ -36,9 +37,9 @@ public class RatingPresenter {
         final String userUid = new CurrentUser().getUid();
 
 
-         final DatabaseReference ref = new Nodes().barberRating(barberUid);
+         final DatabaseReference barberRatingRef = new Nodes().barberRating(barberUid);
 
-        ref.runTransaction(new Transaction.Handler() {
+        barberRatingRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
 
@@ -48,11 +49,11 @@ public class RatingPresenter {
                     return Transaction.success(mutableData);
                 }
 
-                if (rating.getStars().containsKey(userUid)){
+               /* if (rating.getStars().containsKey(userUid)){
 
                     return Transaction.abort();
 
-                } else{
+                } else{*/
 
 
                     Map<String, Boolean> map = rating.getStars();
@@ -64,17 +65,17 @@ public class RatingPresenter {
                     int ratingTimes = rating.getRatingTimes();
                     if(auxRating==0 && ratingTimes==0){
                         rating.setRatingTimes(1);
-                        rating.setRating(ratingValue);
+                        rating.setRating(5-ratingValue);
 
                     }else{
                         float newRatingValue = (auxRating*ratingTimes+ratingValue)/(ratingTimes+1);
                         rating.setRatingTimes(rating.getRatingTimes()+1);
-                        rating.setRating(newRatingValue);
+                        rating.setRating(5-newRatingValue);
 
                     }
 
 
-                }
+                //}
 
                 mutableData.setValue(rating);
                 return Transaction.success(mutableData);
@@ -100,7 +101,7 @@ public class RatingPresenter {
     }
 
 
-    public void checkRateNoNull(String barberUid){
+    public void checkRateNoNull(final String barberUid){
 
         final DatabaseReference ref = new Nodes().barberRating(barberUid);
 
@@ -112,14 +113,15 @@ public class RatingPresenter {
                     Rating rating = new Rating();
                     rating.setRating(0);
                     rating.setRatingTimes(0);
+                    rating.setBarberUid(barberUid);
                     Map<String,Boolean> stars = new HashMap<>();
                     stars.put("x", false);
                     rating.setStars(stars);
                     ref.setValue(rating);
-                    ratingCallBack.rateChecked(rating.getRating());
+                    ratingCallBack.rateChecked(5-rating.getRating());
                 }else{
                     Rating rating = dataSnapshot.getValue(Rating.class);
-                    ratingCallBack.rateChecked(rating.getRating());
+                    ratingCallBack.rateChecked(5-rating.getRating());
                 }
             }
 
@@ -128,6 +130,35 @@ public class RatingPresenter {
 
             }
         });
+
+    }
+
+    public void checkAppointmentIsRated(Appointment appointment){
+        final String userUid = new CurrentUser().getUid();
+
+        String appointmentKey = appointment.getKey();
+
+        final DatabaseReference appointmentRef = new Nodes().userAppointment(userUid).child(appointmentKey);
+
+        appointmentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Appointment auxApp = dataSnapshot.getValue(Appointment.class);
+                if (auxApp.isRated()){
+                    ratingCallBack.ratingNoSuccess();
+                }else{
+                    auxApp.setRated(true);
+                    appointmentRef.setValue(auxApp);
+                    ratingCallBack.doRating();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 }

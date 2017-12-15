@@ -11,6 +11,7 @@ public class Rating {
     private int ratingTimes;
     private float rating;
     private Map<String, Boolean> stars = new HashMap<>();
+    private String barberUid;
 
     public Rating() {
     }
@@ -37,5 +38,13 @@ public class Rating {
 
     public void setStars(Map<String, Boolean> stars) {
         this.stars = stars;
+    }
+
+    public String getBarberUid() {
+        return barberUid;
+    }
+
+    public void setBarberUid(String barberUid) {
+        this.barberUid = barberUid;
     }
 }

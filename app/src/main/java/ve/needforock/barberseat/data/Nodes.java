@@ -43,4 +43,8 @@ public class Nodes {
         return root.child("barber_rating").child(barberUid);
     }
 
+    public DatabaseReference rating(){
+        return root.child("barber_rating");
+    }
+
 }

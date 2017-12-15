@@ -138,4 +138,9 @@ public class BarberDetailActivity extends AppCompatActivity implements RatingCal
 
 
     }
+
+    @Override
+    public void doRating() {
+
+    }
 }

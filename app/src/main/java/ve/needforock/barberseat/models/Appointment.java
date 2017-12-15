@@ -10,6 +10,7 @@ import java.util.Date;
 public class Appointment implements Serializable {
     private String userUID, job, barberUid, barberName, key;
     private Date date;
+    private boolean rated;
 
     public Appointment() {
     }
@@ -60,5 +61,13 @@ public class Appointment implements Serializable {
 
     public void setBarberName(String barberName) {
         this.barberName = barberName;
+    }
+
+    public boolean isRated() {
+        return rated;
+    }
+
+    public void setRated(boolean rated) {
+        this.rated = rated;
     }
 }

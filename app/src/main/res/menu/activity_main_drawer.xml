@@ -17,7 +17,7 @@
             android:icon="@mipmap/ic_trending_up_black_24dp"
             android:title="Mas Reservados" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/best_rated"
             android:icon="@mipmap/ic_stars_black_24dp"
             android:title="Mejor Evaluados" />
         <item

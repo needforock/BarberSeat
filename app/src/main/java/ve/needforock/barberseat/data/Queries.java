@@ -36,4 +36,8 @@ public class Queries {
         return new Nodes().user(userUid).child("details");
     }
 
+    public DatabaseReference BarberRating(){
+        return new Nodes().rating();
+    }
+
 }
