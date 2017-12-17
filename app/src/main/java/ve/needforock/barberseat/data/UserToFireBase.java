@@ -22,12 +22,12 @@ public class UserToFireBase {
 
     }
 
-    public void phoneToFireBase(Uri userImageUri , String phone){
+    public void phoneToFireBase(String userImageUrl , String phone){
         CurrentUser currentUser = new CurrentUser();
         Customer customer = new Customer();
         customer.setEmail(currentUser.userEmail());
         customer.setName(currentUser.getCurrentUser().getDisplayName());
-        customer.setPhoto(String.valueOf(userImageUri));
+        customer.setPhoto(userImageUrl);
         customer.setUid(currentUser.getUid());
         customer.setPhone(phone);
         String key = currentUser.getUid();

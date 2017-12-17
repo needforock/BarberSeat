@@ -14,8 +14,10 @@ import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +44,15 @@ public class SetCalendar {
         refreshData(cal, barberUid, context, dialogCaldroidFragment);
 
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+        ArrayList<Date> dates = new ArrayList<>();
+        Date today = Calendar.getInstance().getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1970, 1, 1);
+        Date startDay = calendar.getTime();
+
+        dates = getDaysBetweenDates(startDay, today);
+
+       dialogCaldroidFragment.setDisableDates(dates);
 
         final CaldroidListener listener = new CaldroidListener() {
 
@@ -153,6 +164,22 @@ public class SetCalendar {
 
         return i;
     }
+
+    public static ArrayList<Date> getDaysBetweenDates(Date startdate, Date enddate)
+    {
+        ArrayList<Date> dates = new ArrayList<Date>();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(startdate);
+
+        while (calendar.getTime().before(enddate))
+        {
+            Date result = calendar.getTime();
+            dates.add(result);
+            calendar.add(Calendar.DATE, 1);
+        }
+        return dates;
+    }
+
 
 
 }

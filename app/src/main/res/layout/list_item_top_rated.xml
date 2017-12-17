@@ -19,8 +19,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="6dp"
         android:src="@mipmap/ic_launcher_round"
-        app:siBorderColor="#c2c2c2"
-        app:siBorderWidth="3dp" />
+        app:siBorderWidth="2dp"
+        app:siBorderColor="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/barberNTv"
@@ -73,8 +73,10 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:maxHeight="48dp"
+        android:scaleY="0.5"
+        android:scaleX="0.5"
        android:layout_marginTop="8dp"
-        android:layout_marginLeft="-24dp"
+        android:layout_marginLeft="-45dp"
         android:layout_marginRight="-16dp"
         android:theme="@style/customRatingBar"
         android:numStars="5"

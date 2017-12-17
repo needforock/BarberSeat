@@ -1,12 +1,18 @@
 package ve.needforock.barberseat.views.user_detail;
 
 
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,30 +20,40 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.frosquivel.magicalcamera.MagicalCamera;
+import com.frosquivel.magicalcamera.MagicalPermissions;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.CurrentUser;
 import ve.needforock.barberseat.data.Queries;
+import ve.needforock.barberseat.data.SaveUserPhoto;
 import ve.needforock.barberseat.data.UserToFireBase;
-import ve.needforock.barberseat.models.Customer;
 import ve.needforock.barberseat.views.appointment.JobFragment;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailFragment extends Fragment {
+public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBack, UserCallBack {
 
-    TextView name, mail, phone, number;
-    LinearLayout phoneLL;
-    FloatingActionButton save, edit;
-    String userPhone;
+    private TextView name, mail, phone, number;
+    private LinearLayout phoneLL;
+    private FloatingActionButton save, edit;
+    private String userPhoneValid, path, userPhotoValid,userImageUrl;
+    private CircularImageView circularImageView;
+    private MagicalPermissions magicalPermissions;
+    private MagicalCamera magicalCamera;
+    private int RESIZE_PHOTO_PIXELS_PERCENTAGE = 20;
+    private FirebaseUser firebaseUser;
+    private ProgressDialog progressDialog;
+
 
 
     public UserDetailFragment() {
@@ -56,7 +72,7 @@ public class UserDetailFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        CircularImageView circularImageView = view.findViewById(R.id.userAvatarCiv);
+        circularImageView = view.findViewById(R.id.userAvatarCiv);
         name = view.findViewById(R.id.userNameTv);
         mail = view.findViewById(R.id.userMailTv);
         phone = view.findViewById(R.id.userPhoneEt);
@@ -66,7 +82,31 @@ public class UserDetailFragment extends Fragment {
         edit = view.findViewById(R.id.editFab);
 
 
-        FirebaseUser firebaseUser = new CurrentUser().getCurrentUser();
+        firebaseUser = new CurrentUser().getCurrentUser();
+
+        String[] permissions = new String[]{
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+        };
+
+        magicalPermissions = new MagicalPermissions(this, permissions);
+        magicalCamera = new MagicalCamera(getActivity(), RESIZE_PHOTO_PIXELS_PERCENTAGE, magicalPermissions);
+
+
+
+        circularImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requestPhoto();
+                edit.setVisibility(View.GONE);
+                phoneLL.setVisibility(View.GONE);
+                phone.setVisibility(View.VISIBLE);
+                phone.setText(userPhoneValid);
+
+            }
+        });
 
         final Uri userImageUri = firebaseUser.getPhotoUrl();
         if(userImageUri!=null){
@@ -80,38 +120,19 @@ public class UserDetailFragment extends Fragment {
         name.setText(firebaseUser.getDisplayName());
         String uid = firebaseUser.getUid();
         DatabaseReference ref = new Queries().UserDetails(uid);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Customer customer = dataSnapshot.getValue(Customer.class);
-                userPhone = customer.getPhone();
-                if(userPhone!=null && userPhone.trim().length()>0){
-                    number.setVisibility(View.VISIBLE);
-                    number.setText(userPhone);
-                    phone.setVisibility(View.GONE);
-                    edit.setVisibility(View.VISIBLE);
-
-                }else{
-                    phoneLL.setVisibility(View.GONE);
-                    phone.setVisibility(View.VISIBLE);
-                    phone.setText("");
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });
+        new UserPresenter(this).getUserDetails(ref);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 String userPhone = String.valueOf(phone.getText());
-                new UserToFireBase().phoneToFireBase(userImageUri, userPhone);
+                if(userImageUrl !=null){
+                    new UserToFireBase().phoneToFireBase(userImageUrl, userPhone);
+                }else{
+                    new UserToFireBase().phoneToFireBase(userPhotoValid, userPhone);
+                }
+
                 Toast.makeText(getContext(), "Guardado", Toast.LENGTH_SHORT).show();
                 Fragment fragment = null;
                 Class fragmentClass = null;
@@ -127,14 +148,11 @@ public class UserDetailFragment extends Fragment {
             public void onClick(View view) {
                 phoneLL.setVisibility(View.GONE);
                 phone.setVisibility(View.VISIBLE);
-                phone.setText(userPhone);
+                phone.setText(userPhoneValid);
                 edit.setVisibility(View.GONE);
+
             }
         });
-
-
-
-
 
     }
 
@@ -152,7 +170,91 @@ public class UserDetailFragment extends Fragment {
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Map<String, Boolean> map = magicalPermissions.permissionResult(requestCode, permissions, grantResults);
+        for (String permission : map.keySet()) {
+            Log.d("PERMISSIONS", permission + " was: " + map.get(permission));
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        magicalCamera.resultPhoto(requestCode, resultCode, data);
+        magicalCamera.resultPhoto(requestCode, resultCode, data, MagicalCamera.ORIENTATION_ROTATE_90);
+
+        if (RESULT_OK == resultCode) {
+
+            Bitmap photo = magicalCamera.getPhoto();
+
+            path = magicalCamera.savePhotoInMemoryDevice(photo, "contactPhoto", "myDirectoryName", MagicalCamera.JPEG, true);
+
+            path = "file://" + path;
+
+            setPhoto(path);
+
+        } else {
+            Toast.makeText(getContext(), "Foto No Tomada", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 
 
+
+    private void requestPhoto() {
+        magicalCamera.takeFragmentPhoto(UserDetailFragment.this);
+    }
+
+    private void setPhoto(String path){
+
+        Picasso.with(getContext()).load(path).centerCrop().fit().into(circularImageView);
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        new SaveUserPhoto(this).photoToFirebase(path, firebaseUser.getDisplayName().trim());
+    }
+
+
+    @Override
+    public void saved(String photoUrl) {
+        Log.d("URL", photoUrl);
+        userImageUrl = photoUrl;
+        if(photoUrl.trim().length()>0){
+            progressDialog.dismiss();
+        }
+
+    }
+
+    @Override
+    public void photoNoNull(String photo) {
+        userPhotoValid = photo;
+        Picasso.with(getContext()).load(photo).into(circularImageView);
+    }
+
+    @Override
+    public void userPhoneNoNull(String userPhone) {
+        userPhoneValid = userPhone;
+        number.setVisibility(View.VISIBLE);
+        number.setText(userPhone);
+        phone.setVisibility(View.GONE);
+        edit.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void userPhoneNull() {
+        phoneLL.setVisibility(View.GONE);
+        phone.setVisibility(View.VISIBLE);
+        phone.setText("");
+        edit.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void userNull() {
+
+
+    }
 }

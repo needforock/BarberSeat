@@ -12,7 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -22,10 +22,7 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,20 +36,23 @@ import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.data.Queries;
 import ve.needforock.barberseat.data.UserToFireBase;
 import ve.needforock.barberseat.models.Barber;
-import ve.needforock.barberseat.models.Customer;
 import ve.needforock.barberseat.models.Job;
 import ve.needforock.barberseat.models.Rating;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
 import ve.needforock.barberseat.views.appointment.JobFragment;
 import ve.needforock.barberseat.views.login.LoginActivity;
 import ve.needforock.barberseat.views.top_rated.TopRatedFragment;
+import ve.needforock.barberseat.views.user_detail.UserCallBack;
 import ve.needforock.barberseat.views.user_detail.UserDetailFragment;
+import ve.needforock.barberseat.views.user_detail.UserPresenter;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, UserCallBack {
 
 
     private TextView userName, email;
+    private CircularImageView circularImageView;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +88,12 @@ public class MainActivity extends AppCompatActivity
 
         Rating rating = new Rating();
         rating.setRatingTimes(0);
-        rating.setRating(0);
-        /*Map<String ,Boolean> stars = new HashMap<>();
+        rating.setRating(5);
+        Map<String ,Boolean> stars = new HashMap<>();
         stars.put("x", false);
         rating.setStars(stars);
-        new Nodes().barberRating("456").setValue(rating);*/
+        rating.setBarberUid("456");
+       // new Nodes().barberRating("456").setValue(rating);
 
 
 
@@ -102,7 +103,8 @@ public class MainActivity extends AppCompatActivity
         newBarber2.setUid("457");
         newBarber2.setName("Juanito Alimana");
         newBarber2.setJobs(map1);
-
+        rating.setBarberUid("457");
+        //new Nodes().barberRating("457").setValue(rating);
         //new RatingPresenter(MainActivity.this).rateBarber(newBarber2.getUid(), 0);
 
 
@@ -140,41 +142,19 @@ public class MainActivity extends AppCompatActivity
 
         View header=navigationView.getHeaderView(0);
 
-        userName = (TextView)header.findViewById(R.id.userName2Tv);
-        email = (TextView)header.findViewById(R.id.email2Tv);
-        CircularImageView circularImageView = (CircularImageView) header.findViewById(R.id.avatar2Ci);
+        userName = header.findViewById(R.id.userName2Tv);
+        email = header.findViewById(R.id.email2Tv);
+        circularImageView = header.findViewById(R.id.avatar2Ci);
 
-        FirebaseUser firebaseUser = new CurrentUser().getCurrentUser();
-
-        final Uri userImageUri = firebaseUser.getPhotoUrl();
-        if(userImageUri!=null){
-
-            Picasso.with(this).load(userImageUri).into(circularImageView);
-        }
+        firebaseUser = new CurrentUser().getCurrentUser();
 
 
         email.setText(firebaseUser.getEmail());
         userName.setText(firebaseUser.getDisplayName());
 
         DatabaseReference ref = new Queries().UserDetails(firebaseUser.getUid());
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Customer auxCustomer = dataSnapshot.getValue(Customer.class);
-                if (auxCustomer==null){
-                    new UserToFireBase().SaveUserToFireBase(userImageUri);
-                }
-            }
 
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });
-
-
+        new UserPresenter(this).getUserDetails(ref);
 
 
     }
@@ -189,27 +169,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -230,8 +190,6 @@ public class MainActivity extends AppCompatActivity
             setFragment(fragment, fragmentClass);
             getSupportActionBar().setTitle("Reservar");
 
-
-        } else if (id == R.id.nav_mostBooked) {
 
         } else if (id == R.id.best_rated) {
             fragmentClass = TopRatedFragment.class;
@@ -270,6 +228,35 @@ public class MainActivity extends AppCompatActivity
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+    }
+
+
+    @Override
+    public void photoNoNull(String photo) {
+        if(photo!=null) {
+            Picasso.with(this).load(photo).into(circularImageView);
+        }
+    }
+
+    @Override
+    public void userPhoneNoNull(String phone) {
+
+    }
+
+    @Override
+    public void userPhoneNull() {
+
+
+    }
+
+    @Override
+    public void userNull() {
+
+        final Uri userImageUri = firebaseUser.getPhotoUrl();
+        Log.d("FOTO", String.valueOf(userImageUri));
+        new UserToFireBase().SaveUserToFireBase(userImageUri);
+
 
     }
 

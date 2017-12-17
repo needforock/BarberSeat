@@ -14,6 +14,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.Nodes;
@@ -44,6 +45,9 @@ public class AppointmentAdapter extends FirebaseRecyclerAdapter<Appointment, App
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(model.getDate());
+        Date currentTime = Calendar.getInstance().getTime();
+
+
         int day = calendar.get(calendar.DAY_OF_MONTH);
         String dayString = String.valueOf(day);
         if (dayString.trim().length() == 1){
@@ -54,8 +58,17 @@ public class AppointmentAdapter extends FirebaseRecyclerAdapter<Appointment, App
         String year = String.valueOf(calendar.get(calendar.YEAR));
         String hour = String.valueOf(calendar.get(calendar.HOUR_OF_DAY)) + ":00";
         String date = dayString + "-" + month + "-" + year + " / " + hour;
-        viewHolder.date.setText(date);
-        viewHolder.job.setText(model.getJob());
+
+        if(model.getDate().getTime()<currentTime.getTime()) {
+            viewHolder.date.setText(date   + " (Vencido)");
+        }else{
+            viewHolder.date.setText(date);
+        }
+
+
+            viewHolder.job.setText(model.getJob());
+
+
 
 
 
@@ -89,7 +102,9 @@ public class AppointmentAdapter extends FirebaseRecyclerAdapter<Appointment, App
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Barber auxBarber = dataSnapshot.getValue(Barber.class);
-                viewHolder.barber.setText(auxBarber.getName());
+
+                    viewHolder.barber.setText(auxBarber.getName());
+
 
             }
 

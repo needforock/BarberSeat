@@ -18,8 +18,8 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         android:src="@mipmap/ic_launcher_round"
-        app:siBorderColor="#c2c2c2"
-        app:siBorderWidth="3dp" />
+        app:siBorderWidth="2dp"
+        app:siBorderColor="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/barberTv"

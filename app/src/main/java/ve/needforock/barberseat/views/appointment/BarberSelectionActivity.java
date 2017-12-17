@@ -84,6 +84,8 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
         dialogCaldroidFragment.show(getSupportFragmentManager(),
                 dialogTag);
 
+
+
         new SetCalendar(this).Set(barberUid, dialogCaldroidFragment, BarberSelectionActivity.this);
 
     }

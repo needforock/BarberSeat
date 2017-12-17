@@ -12,10 +12,7 @@
             android:id="@+id/nav_book"
             android:icon="@mipmap/ic_content_cut_white_24dp"
             android:title="Reservar" />
-        <item
-            android:id="@+id/nav_mostBooked"
-            android:icon="@mipmap/ic_trending_up_black_24dp"
-            android:title="Mas Reservados" />
+
         <item
             android:id="@+id/best_rated"
             android:icon="@mipmap/ic_stars_black_24dp"
@@ -28,10 +25,12 @@
 
     <item android:title="">
         <menu>
+
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@mipmap/ic_power_settings_new_white_24dp"
                 android:title="Cerrar Sesión" />
+
         </menu>
     </item>
 

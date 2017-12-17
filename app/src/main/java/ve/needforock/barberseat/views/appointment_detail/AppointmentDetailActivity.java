@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -67,14 +68,22 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
 
 
         new DayValidation(AppointmentDetailActivity.this).validate(cal.get(cal.DAY_OF_WEEK));
+        Date currentTime = Calendar.getInstance().getTime();
+        Log.d("TIME", String.valueOf(currentTime.getTime()));
+        Log.d("TIME", String.valueOf(date.getTime()));
 
         if(appointment.isRated()){
             appointmentRating.setVisibility(View.GONE);
             isRated.setVisibility(View.VISIBLE);
             isRated.setText("Ya Evaluaste Esta Cita");
-        }else{
+        }
+        if(date.getTime()<currentTime.getTime() && !appointment.isRated()){
+
             isRated.setVisibility(View.VISIBLE);
             isRated.setText("Evalúa la calidad del servicio");
+        } else if(date.getTime()>currentTime.getTime()){
+            appointmentRating.setVisibility(View.GONE);
+            isRated.setVisibility(View.GONE);
         }
 
         appointmentRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

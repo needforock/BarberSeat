@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +40,7 @@ import ve.needforock.barberseat.views.barber_detail.BarberDetailActivity;
 import ve.needforock.barberseat.views.dialog_fragment.ReserveCallBack;
 import ve.needforock.barberseat.views.dialog_fragment.ReserveDialogFragment;
 
+import static android.app.Activity.RESULT_OK;
 import static ve.needforock.barberseat.views.appointment.AppointmentFragment.BARBER2_UID;
 import static ve.needforock.barberseat.views.appointment.BarberSelectionActivity.BARBER1_UID;
 import static ve.needforock.barberseat.views.appointment.BarberSelectionActivity.JOB;
@@ -55,8 +57,9 @@ public class TopRatedFragment extends Fragment implements TopRatedListener, Sele
     private CaldroidFragment dialogCaldroidFragment;
     private Bundle state;
     private String barberUID;
-    DialogFragment dialogFragment;
+    private DialogFragment dialogFragment;
     private Date selectedDate;
+    private static final int RC_CODE = 123;
 
     public TopRatedFragment() {
         // Required empty public constructor
@@ -75,13 +78,10 @@ public class TopRatedFragment extends Fragment implements TopRatedListener, Sele
         super.onViewCreated(view, savedInstanceState);
 
         Query query = new Queries().BarberRating().orderByChild("rating");
-
         recyclerView = view.findViewById(R.id.topRatedRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-
         topRatedAdapter = new TopRatedAdapter(query, TopRatedFragment.this);
-
         recyclerView.setAdapter(topRatedAdapter);
         state = savedInstanceState;
 
@@ -136,17 +136,11 @@ public class TopRatedFragment extends Fragment implements TopRatedListener, Sele
                 for (DataSnapshot children : dataSnapshot.getChildren()) {
                     map.put(children.getKey(), children.getValue(String.class));
                     Log.d("JOB",children.getValue(String.class) );
-
                 }
-
                selectJob(map);
-
             }
-
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -154,29 +148,23 @@ public class TopRatedFragment extends Fragment implements TopRatedListener, Sele
 
     public void selectJob(Map<String, String> map){
         Collection<String> jobs = map.values();
-
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("reserve");
         if (prev != null) {
             ft.remove(prev);
         }
         ft.addToBackStack(null);
-
         dialogFragment = ReserveDialogFragment.newInstance(jobs, TopRatedFragment.this);
         dialogFragment.show(ft, "reserve");
-
     }
 
     @Override
     public void cancelClicked() {
         dialogFragment.dismiss();
-
     }
 
     @Override
     public void continueClicked(String jobStr) {
-        Log.d("DATOS", String.valueOf(selectedDate));
-        Log.d("DATOS", String.valueOf(barberUID));
         Intent intent = new Intent(getActivity(), DayView.class);
         intent.putExtra(BARBER1_UID, barberUID);
         intent.putExtra(SELECTED_DATE, selectedDate.getTime());
@@ -184,7 +172,16 @@ public class TopRatedFragment extends Fragment implements TopRatedListener, Sele
         job.setName(jobStr);
         intent.putExtra(JOB, job);
         dialogFragment.dismiss();
-        startActivity(intent);
+        startActivityForResult(intent, RC_CODE);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_CODE){
+            if (resultCode == RESULT_OK){
+                Toast.makeText(getContext(), "Reserva Realizada", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
