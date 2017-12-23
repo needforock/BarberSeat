@@ -130,7 +130,7 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
                 if(userImageUrl !=null){
                     new UserToFireBase().phoneToFireBase(userImageUrl, userPhone);
                 }else{
-                    new UserToFireBase().phoneToFireBase(userPhotoValid, userPhone);
+                    new UserToFireBase().phoneToFireBase("null", userPhone);
                 }
 
                 Toast.makeText(getContext(), "Guardado", Toast.LENGTH_SHORT).show();
@@ -232,7 +232,10 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
     @Override
     public void photoNoNull(String photo) {
         userPhotoValid = photo;
-        Picasso.with(getContext()).load(photo).into(circularImageView);
+
+            Picasso.with(getContext()).load(photo).into(circularImageView);
+
+
     }
 
     @Override
@@ -255,6 +258,11 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
     @Override
     public void userNull() {
 
+
+    }
+
+    @Override
+    public void photoNull() {
 
     }
 }

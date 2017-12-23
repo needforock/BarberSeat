@@ -20,6 +20,7 @@ import ve.needforock.barberseat.adapters.BarberListener;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Job;
 import ve.needforock.barberseat.views.barber_detail.BarberDetailActivity;
+import ve.needforock.barberseat.views.day.DayView;
 
 public class BarberSelectionActivity extends AppCompatActivity implements BarberListener, SelectedDateCallBack {
 

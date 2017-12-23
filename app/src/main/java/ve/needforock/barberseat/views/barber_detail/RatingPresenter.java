@@ -68,7 +68,10 @@ public class RatingPresenter {
                         rating.setRating(5-ratingValue);
 
                     }else{
-                        float newRatingValue = (auxRating*ratingTimes+ratingValue)/(ratingTimes+1);
+
+                        float newRatingValue = ((5-auxRating)*ratingTimes+ratingValue)/(ratingTimes+1);
+                        Log.d("NEWRATING", String.valueOf(newRatingValue));
+                        Log.d("RATING ", String.valueOf(ratingValue));
                         rating.setRatingTimes(rating.getRatingTimes()+1);
                         rating.setRating(5-newRatingValue);
 

@@ -27,18 +27,23 @@ public class UserPresenter {
                 Customer customer = dataSnapshot.getValue(Customer.class);
                 if(customer==null){
                     userCallBack.userNull();
-                }
-                if(customer.getPhoto()!=null){
-                    userCallBack.photoNoNull(customer.getPhoto());
-                }
-                String userPhone = customer.getPhone();
-                if(userPhone!=null && userPhone.trim().length()>0){
-                    userCallBack.userPhoneNoNull(userPhone);
+                }else {
+                    if(customer.getPhoto().equals("null")||customer.getPhoto()==null){
+                        userCallBack.photoNull();
 
-                }else{
-                    userCallBack.userPhoneNull();
+                    }else{
+                        userCallBack.photoNoNull(customer.getPhoto());
+                    }
+                    String userPhone = customer.getPhone();
+                    if(userPhone!=null && userPhone.trim().length()>0){
+                        userCallBack.userPhoneNoNull(userPhone);
 
+                    }else{
+                        userCallBack.userPhoneNull();
+
+                    }
                 }
+
 
             }
 

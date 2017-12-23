@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -51,8 +50,8 @@ public class MainActivity extends AppCompatActivity
 
 
     private TextView userName, email;
-    private CircularImageView circularImageView;
-    private FirebaseUser firebaseUser;
+    private Uri userImageUri;
+    CircularImageView circularImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +87,11 @@ public class MainActivity extends AppCompatActivity
 
         Rating rating = new Rating();
         rating.setRatingTimes(0);
-        rating.setRating(5);
-        Map<String ,Boolean> stars = new HashMap<>();
+        rating.setRating(0);
+        /*Map<String ,Boolean> stars = new HashMap<>();
         stars.put("x", false);
         rating.setStars(stars);
-        rating.setBarberUid("456");
-       // new Nodes().barberRating("456").setValue(rating);
+        new Nodes().barberRating("456").setValue(rating);*/
 
 
 
@@ -103,8 +101,7 @@ public class MainActivity extends AppCompatActivity
         newBarber2.setUid("457");
         newBarber2.setName("Juanito Alimana");
         newBarber2.setJobs(map1);
-        rating.setBarberUid("457");
-        //new Nodes().barberRating("457").setValue(rating);
+
         //new RatingPresenter(MainActivity.this).rateBarber(newBarber2.getUid(), 0);
 
 
@@ -142,19 +139,24 @@ public class MainActivity extends AppCompatActivity
 
         View header=navigationView.getHeaderView(0);
 
-        userName = header.findViewById(R.id.userName2Tv);
-        email = header.findViewById(R.id.email2Tv);
-        circularImageView = header.findViewById(R.id.avatar2Ci);
+        userName = (TextView)header.findViewById(R.id.userName2Tv);
+        email = (TextView)header.findViewById(R.id.email2Tv);
+        circularImageView = (CircularImageView) header.findViewById(R.id.avatar2Ci);
 
-        firebaseUser = new CurrentUser().getCurrentUser();
+        FirebaseUser firebaseUser = new CurrentUser().getCurrentUser();
+
+       userImageUri = firebaseUser.getPhotoUrl();
 
 
         email.setText(firebaseUser.getEmail());
         userName.setText(firebaseUser.getDisplayName());
 
         DatabaseReference ref = new Queries().UserDetails(firebaseUser.getUid());
-
         new UserPresenter(this).getUserDetails(ref);
+
+
+
+
 
 
     }
@@ -191,7 +193,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Reservar");
 
 
-        } else if (id == R.id.best_rated) {
+        }else if (id == R.id.best_rated) {
             fragmentClass = TopRatedFragment.class;
             setFragment(fragment, fragmentClass);
             getSupportActionBar().setTitle("Mejor Evaluados");
@@ -234,9 +236,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void photoNoNull(String photo) {
-        if(photo!=null) {
+
+
             Picasso.with(this).load(photo).into(circularImageView);
-        }
+
+
     }
 
     @Override
@@ -247,18 +251,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void userPhoneNull() {
 
-
     }
 
     @Override
     public void userNull() {
-
-        final Uri userImageUri = firebaseUser.getPhotoUrl();
-        Log.d("FOTO", String.valueOf(userImageUri));
         new UserToFireBase().SaveUserToFireBase(userImageUri);
-
 
     }
 
+    @Override
+    public void photoNull() {
 
+    }
 }

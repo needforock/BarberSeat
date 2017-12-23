@@ -9,22 +9,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.roomorama.caldroid.CaldroidFragment;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import ve.needforock.barberseat.R;
@@ -33,10 +28,10 @@ import ve.needforock.barberseat.adapters.TopRatedListener;
 import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.data.Queries;
 import ve.needforock.barberseat.models.Job;
-import ve.needforock.barberseat.views.appointment.DayView;
 import ve.needforock.barberseat.views.appointment.SelectedDateCallBack;
 import ve.needforock.barberseat.views.appointment.SetCalendar;
 import ve.needforock.barberseat.views.barber_detail.BarberDetailActivity;
+import ve.needforock.barberseat.views.day.DayView;
 import ve.needforock.barberseat.views.dialog_fragment.ReserveCallBack;
 import ve.needforock.barberseat.views.dialog_fragment.ReserveDialogFragment;
 
@@ -49,7 +44,7 @@ import static ve.needforock.barberseat.views.appointment.BarberSelectionActivity
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TopRatedFragment extends Fragment implements TopRatedListener, SelectedDateCallBack, ReserveCallBack {
+public class TopRatedFragment extends Fragment implements TopRatedListener, SelectedDateCallBack, ReserveCallBack, JobsCallBack {
 
 
     private RecyclerView recyclerView;
@@ -128,22 +123,12 @@ public class TopRatedFragment extends Fragment implements TopRatedListener, Sele
         barberUID = barberUid;
         selectedDate = date;
         DatabaseReference barberJobs = new Nodes().barber(barberUid).child("jobs");
-        final Map<String,String> map = new HashMap<>();
-        barberJobs.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        new JobsPresenter(this).jobs(barberJobs);
 
-                for (DataSnapshot children : dataSnapshot.getChildren()) {
-                    map.put(children.getKey(), children.getValue(String.class));
-                    Log.d("JOB",children.getValue(String.class) );
-                }
-               selectJob(map);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
+    }
+    @Override
+    public void jobs(Map<String, String> map) {
+        selectJob(map);
     }
 
     public void selectJob(Map<String, String> map){
@@ -184,4 +169,6 @@ public class TopRatedFragment extends Fragment implements TopRatedListener, Sele
             }
         }
     }
+
+
 }

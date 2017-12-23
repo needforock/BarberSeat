@@ -10,5 +10,6 @@ public interface UserCallBack {
     void userPhoneNoNull(String phone);
     void userPhoneNull();
     void userNull();
+    void photoNull();
 
 }
