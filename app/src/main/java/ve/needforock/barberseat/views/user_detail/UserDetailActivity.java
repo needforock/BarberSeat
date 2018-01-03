@@ -140,7 +140,7 @@ public class UserDetailActivity extends AppCompatActivity implements SaveUserPho
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         magicalCamera.resultPhoto(requestCode, resultCode, data);
-        magicalCamera.resultPhoto(requestCode, resultCode, data, MagicalCamera.ORIENTATION_ROTATE_90);
+        magicalCamera.resultPhoto(requestCode, resultCode, data, MagicalCamera.ORIENTATION_ROTATE_270);
 
         if (RESULT_OK == resultCode) {
             Bitmap photo = magicalCamera.getPhoto();

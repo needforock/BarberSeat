@@ -35,8 +35,8 @@ public class LoginActivity extends AppCompatActivity implements LoginCallback {
                                         new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()/*,
                                         new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build(),
                                         new AuthUI.IdpConfig.Builder(AuthUI.TWITTER_PROVIDER).build()*/))
-                        //.setTheme(R.style.LoginTheme)
-                        //.setLogo(R.mipmap.logo)
+                        .setTheme(R.style.LoginTheme)
+                        .setLogo(R.mipmap.logo)
                         .build(),
                 RC_SIGN_IN);
 

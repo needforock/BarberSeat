@@ -18,7 +18,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="6dp"
-        android:src="@mipmap/ic_launcher_round"
+        android:src="@drawable/ic_android_black_24dp"
         app:siBorderWidth="2dp"
         app:siBorderColor="@color/colorPrimary" />
 
