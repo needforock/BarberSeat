@@ -52,18 +52,12 @@ public class AppointmentFragment extends Fragment implements AppointmentListener
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         final String customerUid = new CurrentUser().getUid();
-
         Query query = new Queries().CustomerAppointments(customerUid).orderByChild("key");
-
-
         recyclerView = view.findViewById(R.id.appointmentRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        appointmentAdapter = new AppointmentAdapter(AppointmentFragment.this, query, getContext());
+        appointmentAdapter = new AppointmentAdapter(AppointmentFragment.this, query);
         recyclerView.setAdapter(appointmentAdapter);
     }
 
@@ -72,29 +66,20 @@ public class AppointmentFragment extends Fragment implements AppointmentListener
     @Override
     public void deleteClicked(final Appointment appointment) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        // 2. Chain together various setter methods to set the dialog characteristics
         builder.setMessage("¿Desea Eliminar la reserva?");
-
-
-        // Add the buttons
         builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 new DeleteAppointment().delete(appointment);
                 Toast.makeText(getActivity(), "Reserva Eliminada", Toast.LENGTH_SHORT).show();
-
-
             }
         });
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
+
             }
         });
-
-        // 3. Get the AlertDialog from create()
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 
     @Override
@@ -102,7 +87,6 @@ public class AppointmentFragment extends Fragment implements AppointmentListener
         Intent intent = new Intent(getActivity(), AppointmentDetailActivity.class);
         intent.putExtra(APPOINTMENT, appointment);
         startActivity(intent);
-
     }
 
     @Override

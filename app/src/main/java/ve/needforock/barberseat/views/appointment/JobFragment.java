@@ -35,7 +35,6 @@ public class JobFragment extends Fragment implements JobListener {
 
 
     public JobFragment() {
-        // Required empty public constructor
     }
 
 
@@ -50,18 +49,12 @@ public class JobFragment extends Fragment implements JobListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         Query query = new Queries().BarberJobs();
         recyclerView = view.findViewById(R.id.jobRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-
         jobAdapter = new JobAdapter(this, query, getContext());
         recyclerView.setAdapter(jobAdapter);
-
-
-
     }
 
     @Override

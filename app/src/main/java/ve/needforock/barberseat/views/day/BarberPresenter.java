@@ -23,7 +23,12 @@ public class BarberPresenter {
         this.barberCallBack = barberCallBack;
     }
 
-    public void checkDay(DatabaseReference barberAppDay){
+    public void checkDay(String barberUid, String year, String month, String day){
+
+        DatabaseReference barberAppDay = new Nodes().appointmentDay(barberUid)
+                .child(year)
+                .child(month)
+                .child(day);
 
         barberAppDay.addValueEventListener(new ValueEventListener() {
             @Override
@@ -47,7 +52,8 @@ public class BarberPresenter {
 
     }
 
-    public void checkBarber(DatabaseReference barber){
+    public void checkBarber(String barberUid){
+        DatabaseReference barber = new Nodes().barber(barberUid);
 
         barber.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

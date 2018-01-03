@@ -1,10 +1,8 @@
 package ve.needforock.barberseat.views.appointment;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,7 +11,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,34 +28,28 @@ import ve.needforock.barberseat.data.Nodes;
 public class SetCalendar {
 
 
-    Calendar cal = Calendar.getInstance();
-    SelectedDateCallBack selectedDateCallBack;
-    Context context;
+    private Calendar cal = Calendar.getInstance();
+    private SelectedDateCallBack selectedDateCallBack;
+
 
     public SetCalendar(SelectedDateCallBack selectedDateCallBack) {
         this.selectedDateCallBack = selectedDateCallBack;
     }
 
-    public void Set(final String barberUid, final CaldroidFragment dialogCaldroidFragment, final Context context) {
-
-        refreshData(cal, barberUid, context, dialogCaldroidFragment);
-
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+    public void Set(final String barberUid, final CaldroidFragment dialogCaldroidFragment) {
+        refreshData(cal, barberUid, dialogCaldroidFragment);
         ArrayList<Date> dates = new ArrayList<>();
         Date today = Calendar.getInstance().getTime();
         Calendar calendar = Calendar.getInstance();
         calendar.set(1970, 1, 1);
         Date startDay = calendar.getTime();
-
         dates = getDaysBetweenDates(startDay, today);
-
-       dialogCaldroidFragment.setDisableDates(dates);
+        dialogCaldroidFragment.setDisableDates(dates);
 
         final CaldroidListener listener = new CaldroidListener() {
 
             @Override
             public void onSelectDate(Date date, View view) {
-
                 selectedDateCallBack.selectedDate(date, barberUid);
                 dialogCaldroidFragment.dismiss();
 
@@ -69,7 +60,7 @@ public class SetCalendar {
                 year = year - 1900;
                 cal.set(year + 1900, month, 15);
                 dialogCaldroidFragment.refreshView();
-                refreshData(cal, barberUid, context, dialogCaldroidFragment);
+                refreshData(cal, barberUid, dialogCaldroidFragment);
             }
         };
 
@@ -78,7 +69,7 @@ public class SetCalendar {
     }
 
 
-    public void refreshData(final Calendar cal, String barberUid, final Context context, final CaldroidFragment dialogCaldroidFragment) {
+    private void refreshData(final Calendar cal, String barberUid, final CaldroidFragment dialogCaldroidFragment) {
 
         final int year = cal.get(cal.YEAR);
         final int month = cal.get(cal.MONTH);
@@ -86,10 +77,6 @@ public class SetCalendar {
         DatabaseReference barberAppMonth = new Nodes().appointmentDay(barberUid)
                 .child(String.valueOf(year))
                 .child(String.valueOf(month));
-
-
-
-
         barberAppMonth.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -107,11 +94,9 @@ public class SetCalendar {
                         if (hoursCount == 12) {
                             setFullDayColor(dialogCaldroidFragment, cal.getTime());
                         } else if (hoursCount >0 && hoursCount<12){
-                            setGreenDayColor(dialogCaldroidFragment, cal.getTime(), map);
+                            setGreenDayColor(dialogCaldroidFragment, cal.getTime());
                         }
                     }
-                } else {
-                    Toast.makeText(context, "snapshot Nulo", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -122,9 +107,8 @@ public class SetCalendar {
         });
     }
 
-    public void setFullDayColor(CaldroidFragment dialogCaldroidFragment, Date date) {
+    private void setFullDayColor(CaldroidFragment dialogCaldroidFragment, Date redDate) {
 
-        Date redDate = date;
 
         if (dialogCaldroidFragment != null) {
             ColorDrawable red = new ColorDrawable(Color.parseColor("#b7ff0000"));
@@ -135,43 +119,34 @@ public class SetCalendar {
 
     }
 
-    public void setGreenDayColor(CaldroidFragment dialogCaldroidFragment, Date date, Map<String, Boolean> map ) {
-
-        Date greenDate = date;
+    private void setGreenDayColor(CaldroidFragment dialogCaldroidFragment, Date greenDate) {
 
 
         if (dialogCaldroidFragment != null) {
-
-
                 ColorDrawable green = new ColorDrawable(Color.parseColor("#a4ff96"));
                 dialogCaldroidFragment.setBackgroundDrawableForDate(green, greenDate);
                 dialogCaldroidFragment.setTextColorForDate(R.color.white, greenDate);
-
-
         }
         dialogCaldroidFragment.refreshView();
 
     }
 
-    public int checkDay( Map<String, Boolean> map) {
-
+    private int checkDay( Map<String, Boolean> map) {
         int i = 0;
         for (String key : map.keySet()) {
             if (map.get(key)) {
                 i++;
             }
         }
-
         return i;
     }
 
-    public static ArrayList<Date> getDaysBetweenDates(Date startdate, Date enddate)
+    private static ArrayList<Date> getDaysBetweenDates(Date startDate, Date endDate)
     {
         ArrayList<Date> dates = new ArrayList<Date>();
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(startdate);
-
-        while (calendar.getTime().before(enddate))
+        calendar.setTime(startDate);
+        while (calendar.getTime().before(endDate))
         {
             Date result = calendar.getTime();
             dates.add(result);
@@ -179,8 +154,5 @@ public class SetCalendar {
         }
         return dates;
     }
-
-
-
 }
 

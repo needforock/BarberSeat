@@ -10,8 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -20,7 +18,6 @@ import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.adapters.DayAdapter;
 import ve.needforock.barberseat.adapters.DayListener;
 import ve.needforock.barberseat.data.AppointmentToFireBase;
-import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Job;
 import ve.needforock.barberseat.views.appointment.BarberSelectionActivity;
@@ -45,7 +42,6 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
         barberUid = getIntent().getStringExtra(BarberSelectionActivity.BARBER1_UID);
         date = new Date(getIntent().getLongExtra(BarberSelectionActivity.SELECTED_DATE, -1));
 
-
         job = (Job) getIntent().getSerializableExtra(BarberSelectionActivity.JOB);
         jobName = job.getName();
         Calendar cal = Calendar.getInstance();
@@ -57,23 +53,17 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
 
         getSupportActionBar().setTitle(jobName + " el " + day + "-" + realMonth + "-" + year);
 
+        new BarberPresenter(this).checkDay(barberUid, year, month, day);
 
-        DatabaseReference barberAppDay = new Nodes().appointmentDay(barberUid)
-                .child(year)
-                .child(month)
-                .child(day);
-
-        new BarberPresenter(this).checkDay(barberAppDay);
-        DatabaseReference barber = new Nodes().barber(barberUid);
-        new BarberPresenter(this).checkBarber(barber);
+        new BarberPresenter(this).checkBarber(barberUid);
 
 
     }
 
 
     @Override
-    public void clickedHour(final String hour, final Date date) {
-        new CheckHourPresenter(this, this).checkHour(hour, date, barberUid);
+    public void clickedHour(final String hour) {
+        new CheckHourPresenter(this).checkHour(hour, date, barberUid);
     }
 
     @Override
@@ -116,7 +106,7 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
         recyclerView = findViewById(R.id.hourRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        dayAdapter = new DayAdapter(date, map, DayView.this);
+        dayAdapter = new DayAdapter( map, DayView.this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);

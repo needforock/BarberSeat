@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Date;
 import java.util.Map;
 
 import ve.needforock.barberseat.R;
@@ -21,11 +20,9 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayHolder>{
 
     private Map<String, Boolean> hours;
     private DayListener dayListener;
-    private Date date;
 
-    //TODO remove the date and make the activity handle it
-    public DayAdapter(Date date, Map<String, Boolean> hours, DayListener dayListener) {
-        this.date = date;
+    public DayAdapter(Map<String, Boolean> hours, DayListener dayListener) {
+
         this.hours = hours;
         this.dayListener = dayListener;
     }
@@ -56,7 +53,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayHolder>{
             @Override
             public void onClick(View view) {
                 String auxHour = String.valueOf(holder.getAdapterPosition()+9) +":00";
-                dayListener.clickedHour(auxHour, date);
+                dayListener.clickedHour(auxHour);
             }
         });
 

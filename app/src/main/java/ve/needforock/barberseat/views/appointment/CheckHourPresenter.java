@@ -1,7 +1,5 @@
 package ve.needforock.barberseat.views.appointment;
 
-import android.content.Context;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,24 +19,20 @@ import ve.needforock.barberseat.data.Nodes;
 public class CheckHourPresenter {
 
     private CheckHourCallBack checkHourCallBack;
-    private Context context;
 
-    public CheckHourPresenter(CheckHourCallBack checkHourCallBack, Context context) {
+
+    public CheckHourPresenter(CheckHourCallBack checkHourCallBack) {
         this.checkHourCallBack = checkHourCallBack;
-        this.context = context;
+
     }
 
     public void checkHour(final String hour, final Date date, String barberUid) {
-
-
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-
         final DatabaseReference barberAppDay = new Nodes().appointmentDay(barberUid)
                 .child(String.valueOf(cal.get(cal.YEAR)))
                 .child(String.valueOf(cal.get(cal.MONTH)))
                 .child(String.valueOf(cal.get(cal.DAY_OF_MONTH)));
-
 
         barberAppDay.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -56,17 +50,11 @@ public class CheckHourPresenter {
 
                         checkHourCallBack.available(hour, date);
                     }
-
-
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-
-
     }
 }

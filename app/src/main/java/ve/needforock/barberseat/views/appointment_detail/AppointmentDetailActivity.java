@@ -11,28 +11,25 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.DeleteAppointment;
-import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.models.Appointment;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
 import ve.needforock.barberseat.views.barber_detail.RatingCallBack;
 import ve.needforock.barberseat.views.barber_detail.RatingPresenter;
+import ve.needforock.barberseat.views.day.BarberCallBack;
+import ve.needforock.barberseat.views.day.BarberPresenter;
 
-public class AppointmentDetailActivity extends AppCompatActivity implements DayCallBack, RatingCallBack{
+public class AppointmentDetailActivity extends AppCompatActivity implements DayCallBack, RatingCallBack, BarberCallBack{
 
     private Appointment appointment;
-    private String year, month, day, hour, realMonth, barberUid;
-    private TextView dateTv;
+    private String year, month, day, realMonth, barberUid;
+    private TextView dateTv, name, phone, job;
     private RatingBar appointmentRating;
     private float rate;
 
@@ -40,16 +37,16 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         appointment = (Appointment) getIntent().getSerializableExtra(AppointmentFragment.APPOINTMENT);
 
         getSupportActionBar().setTitle("Detalle de Reserva");
 
-        final TextView name = findViewById(R.id.barberNameTv);
-        final TextView phone = findViewById(R.id.barberPhoneTv);
-        final TextView job = findViewById(R.id.appJobTv);
+        name = findViewById(R.id.barberNameTv);
+        phone = findViewById(R.id.barberPhoneTv);
+        job = findViewById(R.id.appJobTv);
         TextView isRated = findViewById(R.id.isRatedTv);
         dateTv = findViewById(R.id.appointmentDateTv);
 
@@ -94,25 +91,10 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
         });
 
 
-        DatabaseReference barber = new Nodes().barber(barberUid);
-        barber.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Barber auxBarber = dataSnapshot.getValue(Barber.class);
-                name.setText(auxBarber.getName());
-                phone.setText(auxBarber.getPhone());
-                job.setText(appointment.getJob());
 
-            }
+        new BarberPresenter(this).checkBarber(barberUid);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab =  findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,5 +150,23 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
     @Override
     public void doRating() {
         new RatingPresenter(AppointmentDetailActivity.this).rateBarber(barberUid, rate);
+    }
+
+    @Override
+    public void dayChecked(Map<String, Boolean> map) {
+
+    }
+
+    @Override
+    public void barberChecked(Barber barber) {
+        name.setText(barber.getName());
+        phone.setText(barber.getPhone());
+        job.setText(appointment.getJob());
+
+    }
+
+    @Override
+    public void jobsChecked(String specialties) {
+
     }
 }

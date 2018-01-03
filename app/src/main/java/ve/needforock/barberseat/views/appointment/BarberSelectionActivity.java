@@ -47,7 +47,6 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
 
         getSupportActionBar().setTitle("Barberos que hacen " + job.getName());
 
-
         recyclerView = findViewById(R.id.barberRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -56,15 +55,11 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
         state = savedInstanceState;
         caldroidFragment = new CaldroidFragment();
 
-
-
     }
 
     @Override
     public void reserveClicked(String barberUid) {
-
         dialogCaldroidFragment = new CaldroidFragment();
-
         final String dialogTag = "CALDROID_DIALOG_FRAGMENT";
         if (state != null) {
             dialogCaldroidFragment.restoreDialogStatesFromKey(
@@ -84,10 +79,7 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
 
         dialogCaldroidFragment.show(getSupportFragmentManager(),
                 dialogTag);
-
-
-
-        new SetCalendar(this).Set(barberUid, dialogCaldroidFragment, BarberSelectionActivity.this);
+        new SetCalendar(this).Set(barberUid, dialogCaldroidFragment);
 
     }
 
@@ -102,7 +94,6 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
     @Override
     public void selectedDate(Date date, String barberUid) {
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
-
         Intent intent = new Intent(BarberSelectionActivity.this, DayView.class);
         intent.putExtra(SELECTED_DATE, date.getTime());
         intent.putExtra(BARBER1_UID, barberUid);
@@ -114,7 +105,6 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if(requestCode == RC_CODE){
             if (resultCode == RESULT_OK){
                 Toast.makeText(this, "Reserva Realizada", Toast.LENGTH_SHORT).show();

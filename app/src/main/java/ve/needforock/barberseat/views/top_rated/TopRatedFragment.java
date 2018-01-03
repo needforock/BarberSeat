@@ -114,7 +114,7 @@ public class TopRatedFragment extends Fragment implements TopRatedListener, Sele
         dialogCaldroidFragment.show(getFragmentManager(),
                 dialogTag);
 
-        new SetCalendar(this).Set(barberUid, dialogCaldroidFragment, getActivity());
+        new SetCalendar(this).Set(barberUid, dialogCaldroidFragment);
 
     }
 

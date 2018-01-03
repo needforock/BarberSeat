@@ -5,12 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-
 import java.util.Map;
 
 import ve.needforock.barberseat.R;
-import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
 import ve.needforock.barberseat.views.appointment.BarberSelectionActivity;
@@ -22,7 +19,7 @@ public class BarberDetailActivity extends AppCompatActivity implements RatingCal
     private String barberUid1,barberUid2, specialties;
     private TextView name, phone, specialtiesTv;
     private  RatingBar ratingBar;
-    private  float ratingValue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +38,16 @@ public class BarberDetailActivity extends AppCompatActivity implements RatingCal
         ratingBar = findViewById(R.id.ratingbar);
 
         if(barberUid2 == null){
-            DatabaseReference barber = new Nodes().barber(barberUid1);
-            new BarberPresenter(this).checkBarber(barber);
+
+            new BarberPresenter(this).checkBarber(barberUid1);
             new RatingPresenter(BarberDetailActivity.this).checkRateNoNull(barberUid1);
             new BarberPresenter(this).checkJobs(barberUid1);
 
         }
 
         if(barberUid1 == null){
-            DatabaseReference barber = new Nodes().barber(barberUid2);
-            new BarberPresenter(this).checkBarber(barber);
+
+            new BarberPresenter(this).checkBarber(barberUid2);
             new RatingPresenter(BarberDetailActivity.this).checkRateNoNull(barberUid2);
             new BarberPresenter(this).checkJobs(barberUid2);
 
