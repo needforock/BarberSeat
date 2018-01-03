@@ -3,7 +3,6 @@ package ve.needforock.barberseat.adapters;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +41,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayHolder>{
     public void onBindViewHolder(final DayHolder holder, int position) {
 
 
-        //String appointment = hours.get(position);
-        Log.d("HORA", String.valueOf(hours.get(0)));
+
         String hour = String.valueOf(position+9) +":00";
         holder.hour.setText(hour);
         if (hours.containsKey(hour) && hours.get(hour)) {

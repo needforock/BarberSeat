@@ -1,6 +1,5 @@
 package ve.needforock.barberseat.views.user_detail;
 
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,14 +7,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,14 +27,8 @@ import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.CurrentUser;
 import ve.needforock.barberseat.data.SaveUserPhoto;
 import ve.needforock.barberseat.data.UserToFireBase;
-import ve.needforock.barberseat.views.appointment.JobFragment;
 
-import static android.app.Activity.RESULT_OK;
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBack, UserCallBack {
+public class UserDetailActivity extends AppCompatActivity implements SaveUserPhotoCallBack, UserCallBack {
 
     private TextView name, mail, phone, number;
     private LinearLayout phoneLL;
@@ -54,32 +43,21 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
     private UserPresenter userPresenter;
     private String uid;
 
-
-
-    public UserDetailFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_detail, container, false);
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_detail);
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        getSupportActionBar().setTitle("Mi Perfil");
 
-        circularImageView = view.findViewById(R.id.userAvatarCiv);
-        name = view.findViewById(R.id.userNameTv);
-        mail = view.findViewById(R.id.userMailTv);
-        phone = view.findViewById(R.id.userPhoneEt);
-        number = view.findViewById(R.id.numberTv);
-        phoneLL = view.findViewById(R.id.phonLL);
-        save = view.findViewById(R.id.saveFab);
-        edit = view.findViewById(R.id.editFab);
+        circularImageView = findViewById(R.id.userAvatarCiv);
+        name = findViewById(R.id.userNameTv);
+        mail = findViewById(R.id.userMailTv);
+        phone = findViewById(R.id.userPhoneEt);
+        number = findViewById(R.id.numberTv);
+        phoneLL = findViewById(R.id.phonLL);
+        save = findViewById(R.id.saveFab);
+        edit = findViewById(R.id.editFab);
 
 
         firebaseUser = new CurrentUser().getCurrentUser();
@@ -92,7 +70,7 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
         };
 
         magicalPermissions = new MagicalPermissions(this, permissions);
-        magicalCamera = new MagicalCamera(getActivity(), RESIZE_PHOTO_PIXELS_PERCENTAGE, magicalPermissions);
+        magicalCamera = new MagicalCamera(this, RESIZE_PHOTO_PIXELS_PERCENTAGE, magicalPermissions);
 
         circularImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +84,7 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
         final Uri userImageUri = firebaseUser.getPhotoUrl();
         if(userImageUri!=null){
 
-            Picasso.with(getContext()).load(userImageUri).into(circularImageView);
+            Picasso.with(this).load(userImageUri).into(circularImageView);
         }
 
 
@@ -115,7 +93,7 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
         name.setText(firebaseUser.getDisplayName());
         uid = firebaseUser.getUid();
         userPresenter = new UserPresenter(this);
-       userPresenter.startListening(uid);
+        userPresenter.startListening(uid);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,11 +106,8 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
                     new UserToFireBase().phoneToFireBase("null", userPhone);
                 }
 
-                Toast.makeText(getContext(), "Guardado", Toast.LENGTH_SHORT).show();
-                Fragment fragment = null;
-                Class fragmentClass = null;
-                fragmentClass = JobFragment.class;
-                setFragment(fragment, fragmentClass);
+                Toast.makeText(UserDetailActivity.this, "Guardado", Toast.LENGTH_SHORT).show();
+                finish();
 
 
             }
@@ -150,20 +125,6 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
         });
 
     }
-
-
-    public void setFragment (Fragment fragment, Class fragmentClass){
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -188,18 +149,18 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
             setPhoto(path);
 
         } else {
-            Toast.makeText(getContext(), "Foto No Tomada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserDetailActivity.this, "Foto No Tomada", Toast.LENGTH_SHORT).show();
         }
 
     }
     private void requestPhoto() {
-        magicalCamera.takeFragmentPhoto(UserDetailFragment.this);
+        magicalCamera.takePhoto();
     }
 
     private void setPhoto(String path){
 
 
-        progressDialog = new ProgressDialog(getContext());
+        progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.show();
 
@@ -212,7 +173,7 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
         Log.d("URL", photoUrl);
         userImageUrl = photoUrl;
 
-        Picasso.with(getContext()).load(photoUrl).centerCrop().fit().into(circularImageView);
+        Picasso.with(this).load(photoUrl).centerCrop().fit().into(circularImageView);
         if(photoUrl.trim().length()>0){
             progressDialog.dismiss();
         }
@@ -226,8 +187,8 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
     @Override
     public void photoNoNull(String photo) {
         userPhotoValid = photo;
-        Picasso.with(getContext()).invalidate(photo);
-        Picasso.with(getContext()).load(photo).into(circularImageView);
+        Picasso.with(this).invalidate(photo);
+        Picasso.with(this).load(photo).into(circularImageView);
 
     }
 
@@ -259,14 +220,14 @@ public class UserDetailFragment extends Fragment implements SaveUserPhotoCallBac
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("PRUEBA", "onStop: fragment");
+
         userPresenter.stopListening();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("PRUEBA", "onStart: fragment");
+
         userPresenter.startListening(uid);
     }
 }

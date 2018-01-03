@@ -36,7 +36,7 @@ public class Nodes {
     }
 
     public DatabaseReference userAppointment(String userUid){
-        return root.child("users").child(userUid).child("appointments");
+        return root.child("user_appointments").child(userUid);
     }
 
     public DatabaseReference barberRating(String barberUid){

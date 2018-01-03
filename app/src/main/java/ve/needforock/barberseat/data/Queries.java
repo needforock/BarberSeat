@@ -9,7 +9,8 @@ import com.google.firebase.database.DatabaseReference;
 public class Queries {
 
     public DatabaseReference CustomerAppointments (String key){
-        return new Nodes().user(key).child("appointments");
+        return new Nodes().userAppointment(key);
+
     }
 
     public DatabaseReference BarberJobs(){
@@ -33,7 +34,7 @@ public class Queries {
     }
 
     public DatabaseReference UserDetails(String userUid){
-        return new Nodes().user(userUid).child("details");
+        return new Nodes().user(userUid);
     }
 
     public DatabaseReference BarberRating(){

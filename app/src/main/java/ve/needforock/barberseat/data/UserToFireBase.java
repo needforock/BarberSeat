@@ -2,6 +2,8 @@ package ve.needforock.barberseat.data;
 
 import android.net.Uri;
 
+import com.google.firebase.database.ServerValue;
+
 import ve.needforock.barberseat.models.Customer;
 
 /**
@@ -18,12 +20,13 @@ public class UserToFireBase {
         customer.setUid(currentUser.getUid());
 
         String key = currentUser.getUid();
-        new Nodes().user(key).child("details").setValue(customer);
+        new Nodes().user(key).setValue(customer);
 
     }
 
     public void phoneToFireBase(String userImageUrl , String phone){
         CurrentUser currentUser = new CurrentUser();
+
         Customer customer = new Customer();
         customer.setEmail(currentUser.userEmail());
         customer.setName(currentUser.getCurrentUser().getDisplayName());
@@ -31,7 +34,8 @@ public class UserToFireBase {
         customer.setUid(currentUser.getUid());
         customer.setPhone(phone);
         String key = currentUser.getUid();
-        new Nodes().user(key).child("details").setValue(customer);
+        new Nodes().user(key).setValue(customer);
+        new Nodes().user(currentUser.getUid()).child("timeStamp").setValue(ServerValue.TIMESTAMP);
 
     }
 }

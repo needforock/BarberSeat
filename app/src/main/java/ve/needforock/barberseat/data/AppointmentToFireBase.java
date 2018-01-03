@@ -21,7 +21,7 @@ public class AppointmentToFireBase {
 
 
     private String customerUid;
-    private String name;
+
     private int day, month, year, hours;
     public void SaveAppointment(final Context context, final String barberUid, Date date, final String hour, String jobName){
 
@@ -69,7 +69,7 @@ public class AppointmentToFireBase {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                BarberDay auxBarberDay = dataSnapshot.getValue(BarberDay.class);
+
                 ref.child(hour).setValue(true);
                 uploadAppointment(appointment, barberUid, customerUid);
             }
@@ -83,7 +83,7 @@ public class AppointmentToFireBase {
     }
 
     public void uploadAppointment(Appointment appointment, String barberUid, String customerUid){
-        String keyPush = new Nodes().user(customerUid).child("appointments").push().getKey();
+        String keyPush = new Nodes().userAppointment(customerUid).push().getKey();
         String dayString = String.valueOf(day);
         if (dayString.trim().length() == 1){
             dayString = "0" + dayString;
@@ -92,7 +92,8 @@ public class AppointmentToFireBase {
         String appointKey = dateKey + "_" + keyPush;
         appointment.setKey(appointKey);
         new Nodes().appointments(barberUid).child(appointKey).setValue(appointment);
-        new Nodes().user(customerUid).child("appointments").child(appointKey).setValue(appointment);
+        new Nodes().userAppointment(customerUid).child(appointKey).setValue(appointment);
+
 
     }
 

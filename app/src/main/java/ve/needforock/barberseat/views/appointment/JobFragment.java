@@ -33,9 +33,11 @@ public class JobFragment extends Fragment implements JobListener {
     public static final String SELECTED_JOB ="ve.needforock.barberseat.views.appointment.KEY.SELECTED_JOB";
 
 
+
     public JobFragment() {
         // Required empty public constructor
     }
+
 
 
     @Override
@@ -49,15 +51,16 @@ public class JobFragment extends Fragment implements JobListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         Query query = new Queries().BarberJobs();
-
-
         recyclerView = view.findViewById(R.id.jobRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
         jobAdapter = new JobAdapter(this, query, getContext());
         recyclerView.setAdapter(jobAdapter);
+
+
 
     }
 

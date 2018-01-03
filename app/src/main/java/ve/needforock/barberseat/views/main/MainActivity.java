@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -21,7 +22,6 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -32,7 +32,6 @@ import java.util.Map;
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.CurrentUser;
 import ve.needforock.barberseat.data.Nodes;
-import ve.needforock.barberseat.data.Queries;
 import ve.needforock.barberseat.data.UserToFireBase;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Job;
@@ -42,16 +41,18 @@ import ve.needforock.barberseat.views.appointment.JobFragment;
 import ve.needforock.barberseat.views.login.LoginActivity;
 import ve.needforock.barberseat.views.top_rated.TopRatedFragment;
 import ve.needforock.barberseat.views.user_detail.UserCallBack;
-import ve.needforock.barberseat.views.user_detail.UserDetailFragment;
+import ve.needforock.barberseat.views.user_detail.UserDetailActivity;
 import ve.needforock.barberseat.views.user_detail.UserPresenter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, UserCallBack {
 
-
+    private UserPresenter userPresenter;
     private TextView userName, email;
+    private String userUid;
     private Uri userImageUri;
-    CircularImageView circularImageView;
+    private CircularImageView circularImageView;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,42 +129,36 @@ public class MainActivity extends AppCompatActivity
         new Nodes().barber(newBarber2.getUid()).setValue(newBarber2);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         View header=navigationView.getHeaderView(0);
 
-        userName = (TextView)header.findViewById(R.id.userName2Tv);
-        email = (TextView)header.findViewById(R.id.email2Tv);
-        circularImageView = (CircularImageView) header.findViewById(R.id.avatar2Ci);
+        userName = header.findViewById(R.id.userName2Tv);
+        email = header.findViewById(R.id.email2Tv);
+        circularImageView =  header.findViewById(R.id.avatar2Ci);
 
-        FirebaseUser firebaseUser = new CurrentUser().getCurrentUser();
-
-       userImageUri = firebaseUser.getPhotoUrl();
+        firebaseUser = new CurrentUser().getCurrentUser();
+        userImageUri = firebaseUser.getPhotoUrl();
 
 
         email.setText(firebaseUser.getEmail());
         userName.setText(firebaseUser.getDisplayName());
+        userUid = firebaseUser.getUid();
 
-        DatabaseReference ref = new Queries().UserDetails(firebaseUser.getUid());
-        new UserPresenter(this).getUserDetails(ref);
-
-
-
-
-
+        userPresenter=new UserPresenter(this);
+        userPresenter.startListening(userUid);
 
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -199,9 +194,8 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Mejor Evaluados");
 
         } else if (id == R.id.nav_profile) {
-            fragmentClass = UserDetailFragment.class;
-            setFragment(fragment, fragmentClass);
-            getSupportActionBar().setTitle("Mi Perfil");
+            Intent intent = new Intent(MainActivity.this, UserDetailActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance()
                     .signOut(this)
@@ -216,7 +210,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -236,10 +230,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void photoNoNull(String photo) {
-
-
-            Picasso.with(this).load(photo).into(circularImageView);
-
+        Picasso.with(this).invalidate(photo);
+        Picasso.with(this).load(photo).into(circularImageView);
 
     }
 
@@ -262,5 +254,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void photoNull() {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("TAG", "onStart: ");
+        userPresenter.startListening(userUid);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("TAG", "onStop: ");
+        userPresenter.stopListening();
     }
 }
