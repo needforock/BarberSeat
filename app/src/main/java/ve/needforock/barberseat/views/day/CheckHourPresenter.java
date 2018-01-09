@@ -1,4 +1,4 @@
-package ve.needforock.barberseat.views.appointment;
+package ve.needforock.barberseat.views.day;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

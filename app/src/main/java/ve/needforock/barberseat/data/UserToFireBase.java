@@ -18,7 +18,7 @@ public class UserToFireBase {
         customer.setName(currentUser.getCurrentUser().getDisplayName());
         customer.setPhoto(String.valueOf(userImageUri));
         customer.setUid(currentUser.getUid());
-
+        customer.setAppointments(0);
         String key = currentUser.getUid();
         new Nodes().user(key).setValue(customer);
 

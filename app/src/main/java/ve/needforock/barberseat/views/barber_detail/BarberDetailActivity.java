@@ -5,12 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
+
 import java.util.Map;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
-import ve.needforock.barberseat.views.appointment.BarberSelectionActivity;
+import ve.needforock.barberseat.views.barber_selection.BarberSelectionActivity;
 import ve.needforock.barberseat.views.day.BarberCallBack;
 import ve.needforock.barberseat.views.day.BarberPresenter;
 
@@ -19,6 +22,7 @@ public class BarberDetailActivity extends AppCompatActivity implements RatingCal
     private String barberUid1,barberUid2, specialties;
     private TextView name, phone, specialtiesTv;
     private  RatingBar ratingBar;
+    private CircularImageView barberPhoto;
 
 
     @Override
@@ -30,12 +34,12 @@ public class BarberDetailActivity extends AppCompatActivity implements RatingCal
         barberUid1 = getIntent().getStringExtra(BarberSelectionActivity.BARBER1_UID);
         barberUid2 = getIntent().getStringExtra(AppointmentFragment.BARBER2_UID);
 
-
-        name = findViewById(R.id.detailNameTv);
-        phone = findViewById(R.id.detailPhoneTv);
-        specialtiesTv = findViewById(R.id.specialtiesTv);
+        barberPhoto = (CircularImageView) findViewById(R.id.detailAvatarCiv);
+        name = (TextView) findViewById(R.id.detailNameTv);
+        phone = (TextView) findViewById(R.id.detailPhoneTv);
+        specialtiesTv = (TextView) findViewById(R.id.specialtiesTv);
         specialties="";
-        ratingBar = findViewById(R.id.ratingbar);
+        ratingBar = (RatingBar) findViewById(R.id.ratingbar);
 
         if(barberUid2 == null){
 
@@ -84,6 +88,7 @@ public class BarberDetailActivity extends AppCompatActivity implements RatingCal
     public void barberChecked(Barber barber) {
         name.setText(barber.getName());
         phone.setText(barber.getPhone());
+        Picasso.with(this).load(barber.getPhoto()).into(barberPhoto);
     }
 
     @Override

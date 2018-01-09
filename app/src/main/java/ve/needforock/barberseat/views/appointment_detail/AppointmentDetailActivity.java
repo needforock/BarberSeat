@@ -28,7 +28,7 @@ import ve.needforock.barberseat.views.day.BarberPresenter;
 public class AppointmentDetailActivity extends AppCompatActivity implements DayCallBack, RatingCallBack, BarberCallBack{
 
     private Appointment appointment;
-    private String year, month, day, realMonth, barberUid;
+    private String year, month, day, hour, realMonth, barberUid;
     private TextView dateTv, name, phone, job;
     private RatingBar appointmentRating;
     private float rate;
@@ -37,18 +37,18 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_detail);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         appointment = (Appointment) getIntent().getSerializableExtra(AppointmentFragment.APPOINTMENT);
 
         getSupportActionBar().setTitle("Detalle de Reserva");
 
-        name = findViewById(R.id.barberNameTv);
-        phone = findViewById(R.id.barberPhoneTv);
-        job = findViewById(R.id.appJobTv);
-        TextView isRated = findViewById(R.id.isRatedTv);
-        dateTv = findViewById(R.id.appointmentDateTv);
+        name = (TextView) findViewById(R.id.barberNameTv);
+        phone = (TextView) findViewById(R.id.barberPhoneTv);
+        job = (TextView) findViewById(R.id.appJobTv);
+        TextView isRated = (TextView) findViewById(R.id.isRatedTv);
+        dateTv = (TextView) findViewById(R.id.appointmentDateTv);
 
         barberUid = appointment.getBarberUid();
 
@@ -60,7 +60,8 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
         month = String.valueOf(cal.get(cal.MONTH));
         realMonth = String.valueOf(cal.get(cal.MONTH)+1);
         day = String.valueOf(cal.get(cal.DAY_OF_MONTH));
-        appointmentRating = findViewById(R.id.appointmentRating);
+        hour = String.valueOf(cal.get(cal.HOUR_OF_DAY));
+        appointmentRating = (RatingBar) findViewById(R.id.appointmentRating);
 
 
         new DayValidation(AppointmentDetailActivity.this).validate(cal.get(cal.DAY_OF_WEEK));
@@ -94,7 +95,7 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
 
         new BarberPresenter(this).checkBarber(barberUid);
 
-        FloatingActionButton fab =  findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,7 +128,8 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
 
     @Override
     public void dayInString(String dayString) {
-        dateTv.setText(dayString + " " + day + "-" + realMonth + "-" + year);
+        String appDate = dayString + " " + day + "-" + realMonth + "-" + year + " / " + hour + ":00";
+        dateTv.setText(appDate);
     }
 
     @Override

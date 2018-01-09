@@ -1,4 +1,4 @@
-package ve.needforock.barberseat.views.appointment;
+package ve.needforock.barberseat.views.barber_selection;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,7 +19,10 @@ import ve.needforock.barberseat.adapters.BarberListener;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Job;
 import ve.needforock.barberseat.views.barber_detail.BarberDetailActivity;
+import ve.needforock.barberseat.views.calendar.SelectedDateCallBack;
+import ve.needforock.barberseat.views.calendar.SetCalendar;
 import ve.needforock.barberseat.views.day.DayView;
+import ve.needforock.barberseat.views.job_selection.JobFragment;
 
 public class BarberSelectionActivity extends AppCompatActivity implements BarberListener, SelectedDateCallBack {
 
@@ -47,7 +49,7 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
 
         getSupportActionBar().setTitle("Barberos que hacen " + job.getName());
 
-        recyclerView = findViewById(R.id.barberRv);
+        recyclerView = (RecyclerView) findViewById(R.id.barberRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         barberAdapter = new BarberAdapter(barbers, this);
@@ -93,7 +95,7 @@ public class BarberSelectionActivity extends AppCompatActivity implements Barber
 
     @Override
     public void selectedDate(Date date, String barberUid) {
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+
         Intent intent = new Intent(BarberSelectionActivity.this, DayView.class);
         intent.putExtra(SELECTED_DATE, date.getTime());
         intent.putExtra(BARBER1_UID, barberUid);

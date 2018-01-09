@@ -1,4 +1,4 @@
-package ve.needforock.barberseat.views.appointment;
+package ve.needforock.barberseat.views.day;
 
 import java.util.Date;
 

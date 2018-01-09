@@ -1,10 +1,12 @@
 package ve.needforock.barberseat.views.appointment;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,14 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.firebase.database.Query;
-
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.adapters.AppointmentAdapter;
 import ve.needforock.barberseat.adapters.AppointmentListener;
 import ve.needforock.barberseat.data.CurrentUser;
 import ve.needforock.barberseat.data.DeleteAppointment;
-import ve.needforock.barberseat.data.Queries;
 import ve.needforock.barberseat.models.Appointment;
 import ve.needforock.barberseat.views.appointment_detail.AppointmentDetailActivity;
 import ve.needforock.barberseat.views.barber_detail.BarberDetailActivity;
@@ -35,12 +34,18 @@ public class AppointmentFragment extends Fragment implements AppointmentListener
     private RecyclerView recyclerView;
     private AppointmentAdapter appointmentAdapter;
     public static final String APPOINTMENT = "ve.needforock.barberseat.views.appointment.KEY.APPOINTMENT";
+    private AddAppointmentRequestListener listener;
 
 
     public AppointmentFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener = (AddAppointmentRequestListener) context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,12 +58,21 @@ public class AppointmentFragment extends Fragment implements AppointmentListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final String customerUid = new CurrentUser().getUid();
-        Query query = new Queries().CustomerAppointments(customerUid).orderByChild("key");
         recyclerView = view.findViewById(R.id.appointmentRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        appointmentAdapter = new AppointmentAdapter(AppointmentFragment.this, query);
+        appointmentAdapter = new AppointmentAdapter(AppointmentFragment.this, customerUid);
         recyclerView.setAdapter(appointmentAdapter);
+
+        FloatingActionButton addFab = view.findViewById(R.id.addFab);
+
+        addFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.addRequested();
+
+            }
+        });
     }
 
 

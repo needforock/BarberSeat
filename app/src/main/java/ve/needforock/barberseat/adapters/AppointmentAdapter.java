@@ -9,14 +9,15 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.Nodes;
+import ve.needforock.barberseat.data.Queries;
 import ve.needforock.barberseat.models.Appointment;
 import ve.needforock.barberseat.models.Barber;
 
@@ -29,8 +30,8 @@ public class AppointmentAdapter extends FirebaseRecyclerAdapter<Appointment, App
     private AppointmentListener appointmentListener;
 
 
-    public AppointmentAdapter(AppointmentListener appointmentListener, Query ref) {
-        super(Appointment.class, R.layout.list_item_appointment, AppointmentHolder.class, ref);
+    public AppointmentAdapter(AppointmentListener appointmentListener, String customerUid) {
+        super(Appointment.class, R.layout.list_item_appointment, AppointmentHolder.class, new Queries().CustomerAppointments(customerUid).orderByChild("key"));
         this.appointmentListener = appointmentListener;
 
     }
@@ -64,6 +65,8 @@ public class AppointmentAdapter extends FirebaseRecyclerAdapter<Appointment, App
             }
         });
 
+
+
         viewHolder.circularImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +88,10 @@ public class AppointmentAdapter extends FirebaseRecyclerAdapter<Appointment, App
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Barber auxBarber = dataSnapshot.getValue(Barber.class);
                     viewHolder.barber.setText(auxBarber.getName());
+                if(auxBarber.getPhoto().trim().length()>0) {
+                    Picasso.with(viewHolder.circularImageView.getContext()).load(auxBarber.getPhoto()).into(viewHolder.circularImageView);
+
+                }
             }
 
             @Override

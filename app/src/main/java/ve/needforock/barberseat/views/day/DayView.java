@@ -20,9 +20,7 @@ import ve.needforock.barberseat.adapters.DayListener;
 import ve.needforock.barberseat.data.AppointmentToFireBase;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Job;
-import ve.needforock.barberseat.views.appointment.BarberSelectionActivity;
-import ve.needforock.barberseat.views.appointment.CheckHourCallBack;
-import ve.needforock.barberseat.views.appointment.CheckHourPresenter;
+import ve.needforock.barberseat.views.barber_selection.BarberSelectionActivity;
 
 
 public class DayView extends AppCompatActivity implements DayListener, CheckHourCallBack, BarberCallBack {
@@ -75,7 +73,7 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
 
         builder.setPositiveButton("RESERVAR", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                new AppointmentToFireBase().SaveAppointment(DayView.this, barberUid, date, hour, jobName);
+                new AppointmentToFireBase().SaveAppointment(barberUid, date, hour, jobName);
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
@@ -103,7 +101,7 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
 
     @Override
     public void dayChecked(Map<String, Boolean> map) {
-        recyclerView = findViewById(R.id.hourRv);
+        recyclerView = (RecyclerView) findViewById(R.id.hourRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         dayAdapter = new DayAdapter( map, DayView.this);

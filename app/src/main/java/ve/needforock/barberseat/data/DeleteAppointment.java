@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 
 import ve.needforock.barberseat.models.Appointment;
+import ve.needforock.barberseat.models.Customer;
 
 /**
  * Created by Soporte on 22-Nov-17.
@@ -20,9 +21,10 @@ public class DeleteAppointment {
     private String hour;
 
     public void delete(final Appointment appointment){
-
-        DatabaseReference ref = new Nodes().userAppointment(appointment.getUserUID());
+        String userUid = appointment.getUserUID();
+        DatabaseReference ref = new Nodes().userAppointment(userUid);
         ref.child(appointment.getKey()).removeValue();
+        decreaseAppointmentCount(userUid);
 
         DatabaseReference ref2 = new Nodes().appointments(appointment.getBarberUid());
         ref2.child(appointment.getKey()).removeValue();
@@ -43,6 +45,26 @@ public class DeleteAppointment {
                 if (dataSnapshot != null) {
                             ref3.child(hour).removeValue();
                 }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void decreaseAppointmentCount(String customerUid){
+
+        final DatabaseReference ref = new Nodes().user(customerUid);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Customer auxCustomer = dataSnapshot.getValue(Customer.class);
+                auxCustomer.setAppointments(auxCustomer.getAppointments()-1);
+                ref.setValue(auxCustomer);
             }
 
             @Override

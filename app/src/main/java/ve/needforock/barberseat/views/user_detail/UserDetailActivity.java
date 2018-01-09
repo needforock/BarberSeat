@@ -50,14 +50,14 @@ public class UserDetailActivity extends AppCompatActivity implements SaveUserPho
 
         getSupportActionBar().setTitle("Mi Perfil");
 
-        circularImageView = findViewById(R.id.userAvatarCiv);
-        name = findViewById(R.id.userNameTv);
-        mail = findViewById(R.id.userMailTv);
-        phone = findViewById(R.id.userPhoneEt);
-        number = findViewById(R.id.numberTv);
-        phoneLL = findViewById(R.id.phonLL);
-        save = findViewById(R.id.saveFab);
-        edit = findViewById(R.id.editFab);
+        circularImageView = (CircularImageView) findViewById(R.id.userAvatarCiv);
+        name = (TextView) findViewById(R.id.userNameTv);
+        mail = (TextView) findViewById(R.id.userMailTv);
+        phone = (TextView) findViewById(R.id.userPhoneEt);
+        number = (TextView) findViewById(R.id.numberTv);
+        phoneLL = (LinearLayout) findViewById(R.id.phonLL);
+        save = (FloatingActionButton) findViewById(R.id.saveFab);
+        edit = (FloatingActionButton) findViewById(R.id.editFab);
 
 
         firebaseUser = new CurrentUser().getCurrentUser();

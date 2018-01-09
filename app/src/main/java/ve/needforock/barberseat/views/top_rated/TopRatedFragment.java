@@ -28,18 +28,18 @@ import ve.needforock.barberseat.adapters.TopRatedListener;
 import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.data.Queries;
 import ve.needforock.barberseat.models.Job;
-import ve.needforock.barberseat.views.appointment.SelectedDateCallBack;
-import ve.needforock.barberseat.views.appointment.SetCalendar;
 import ve.needforock.barberseat.views.barber_detail.BarberDetailActivity;
+import ve.needforock.barberseat.views.calendar.SelectedDateCallBack;
+import ve.needforock.barberseat.views.calendar.SetCalendar;
 import ve.needforock.barberseat.views.day.DayView;
 import ve.needforock.barberseat.views.dialog_fragment.ReserveCallBack;
 import ve.needforock.barberseat.views.dialog_fragment.ReserveDialogFragment;
 
 import static android.app.Activity.RESULT_OK;
 import static ve.needforock.barberseat.views.appointment.AppointmentFragment.BARBER2_UID;
-import static ve.needforock.barberseat.views.appointment.BarberSelectionActivity.BARBER1_UID;
-import static ve.needforock.barberseat.views.appointment.BarberSelectionActivity.JOB;
-import static ve.needforock.barberseat.views.appointment.BarberSelectionActivity.SELECTED_DATE;
+import static ve.needforock.barberseat.views.barber_selection.BarberSelectionActivity.BARBER1_UID;
+import static ve.needforock.barberseat.views.barber_selection.BarberSelectionActivity.JOB;
+import static ve.needforock.barberseat.views.barber_selection.BarberSelectionActivity.SELECTED_DATE;
 
 /**
  * A simple {@link Fragment} subclass.

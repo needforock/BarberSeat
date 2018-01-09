@@ -5,8 +5,8 @@ package ve.needforock.barberseat.models;
  */
 
 public class Customer {
-    private String Uid, name, phone, picture, email, photo;
-    private Appointment appointments;
+    private String Uid, name, phone, email, photo;
+    private int appointments;
 
     public Customer() {
     }
@@ -35,19 +35,11 @@ public class Customer {
         this.phone = phone;
     }
 
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public Appointment getAppointments() {
+    public int getAppointments() {
         return appointments;
     }
 
-    public void setAppointments(Appointment appointments) {
+    public void setAppointments(int appointments) {
         this.appointments = appointments;
     }
 

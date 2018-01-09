@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ResultCodes;
 
 import java.util.Arrays;
 
+import io.fabric.sdk.android.Fabric;
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.views.main.MainActivity;
 
@@ -20,6 +22,7 @@ public class LoginActivity extends AppCompatActivity implements LoginCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_login);
         new LoginPresenter(LoginActivity.this).validation();
     }

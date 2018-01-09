@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.Nodes;
@@ -40,6 +41,10 @@ public class TopRatedAdapter extends FirebaseRecyclerAdapter<Rating, TopRatedAda
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Barber barber = dataSnapshot.getValue(Barber.class);
                 viewHolder.barber.setText(barber.getName());
+                if(barber.getPhoto().trim().length()>0) {
+                    Picasso.with(viewHolder.circularImageView.getContext()).load(barber.getPhoto()).into(viewHolder.circularImageView);
+
+                }
 
             }
 

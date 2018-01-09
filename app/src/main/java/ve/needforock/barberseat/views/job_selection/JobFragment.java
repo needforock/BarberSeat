@@ -1,4 +1,4 @@
-package ve.needforock.barberseat.views.appointment;
+package ve.needforock.barberseat.views.job_selection;
 
 
 import android.content.Intent;
@@ -21,6 +21,7 @@ import ve.needforock.barberseat.adapters.JobListener;
 import ve.needforock.barberseat.data.Queries;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Job;
+import ve.needforock.barberseat.views.barber_selection.BarberSelectionActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,6 +56,9 @@ public class JobFragment extends Fragment implements JobListener {
         recyclerView.setLayoutManager(linearLayoutManager);
         jobAdapter = new JobAdapter(this, query, getContext());
         recyclerView.setAdapter(jobAdapter);
+
+
+
     }
 
     @Override

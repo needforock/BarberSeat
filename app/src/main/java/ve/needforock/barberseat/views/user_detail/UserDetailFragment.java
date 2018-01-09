@@ -32,7 +32,7 @@ import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.CurrentUser;
 import ve.needforock.barberseat.data.SaveUserPhoto;
 import ve.needforock.barberseat.data.UserToFireBase;
-import ve.needforock.barberseat.views.appointment.JobFragment;
+import ve.needforock.barberseat.views.job_selection.JobFragment;
 
 import static android.app.Activity.RESULT_OK;
 

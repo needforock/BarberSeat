@@ -31,13 +31,13 @@ import java.util.Map;
 
 import ve.needforock.barberseat.R;
 import ve.needforock.barberseat.data.CurrentUser;
-import ve.needforock.barberseat.data.Nodes;
 import ve.needforock.barberseat.data.UserToFireBase;
 import ve.needforock.barberseat.models.Barber;
 import ve.needforock.barberseat.models.Job;
 import ve.needforock.barberseat.models.Rating;
+import ve.needforock.barberseat.views.appointment.AddAppointmentRequestListener;
 import ve.needforock.barberseat.views.appointment.AppointmentFragment;
-import ve.needforock.barberseat.views.appointment.JobFragment;
+import ve.needforock.barberseat.views.job_selection.JobFragment;
 import ve.needforock.barberseat.views.login.LoginActivity;
 import ve.needforock.barberseat.views.top_rated.TopRatedFragment;
 import ve.needforock.barberseat.views.user_detail.UserCallBack;
@@ -45,7 +45,7 @@ import ve.needforock.barberseat.views.user_detail.UserDetailActivity;
 import ve.needforock.barberseat.views.user_detail.UserPresenter;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, UserCallBack {
+        implements NavigationView.OnNavigationItemSelectedListener, UserCallBack, AddAppointmentRequestListener {
 
     private UserPresenter userPresenter;
     private TextView userName, email;
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
         barbers.add(newBarber);
         barbers.add(newBarber2);
         shave.setBarberList(barbers);
-        new Nodes().jobs().child("rasurado").setValue(shave);
+        //new Nodes().jobs().child("rasurado").setValue(shave);
 
 
         Job cut = new Job();
@@ -122,20 +122,20 @@ public class MainActivity extends AppCompatActivity
         barbers2.add(newBarber);
         barbers2.add(newBarber2);
         cut.setBarberList(barbers2);
-        new Nodes().jobs().child("corte").setValue(cut);
+        //new Nodes().jobs().child("corte").setValue(cut);
 
 
-        new Nodes().barber(newBarber.getUid()).setValue(newBarber);
-        new Nodes().barber(newBarber2.getUid()).setValue(newBarber2);
+       // new Nodes().barber(newBarber.getUid()).setValue(newBarber);
+       // new Nodes().barber(newBarber2.getUid()).setValue(newBarber2);
 
 
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView =  findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header=navigationView.getHeaderView(0);
 
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -269,5 +269,19 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
         Log.d("TAG", "onStop: ");
         userPresenter.stopListening();
+    }
+
+    @Override
+    public void addRequested() {
+        Class fragmentClass = JobFragment.class;
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        getSupportActionBar().setTitle("Reservar");
     }
 }
