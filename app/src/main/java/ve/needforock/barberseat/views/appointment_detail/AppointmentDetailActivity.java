@@ -11,6 +11,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -32,6 +35,7 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
     private TextView dateTv, name, phone, job;
     private RatingBar appointmentRating;
     private float rate;
+    private CircularImageView barberPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
         job = (TextView) findViewById(R.id.appJobTv);
         TextView isRated = (TextView) findViewById(R.id.isRatedTv);
         dateTv = (TextView) findViewById(R.id.appointmentDateTv);
-
+        barberPhoto = (CircularImageView) findViewById(R.id.barberAvatarCiv);
         barberUid = appointment.getBarberUid();
 
 
@@ -164,6 +168,7 @@ public class AppointmentDetailActivity extends AppCompatActivity implements DayC
         name.setText(barber.getName());
         phone.setText(barber.getPhone());
         job.setText(appointment.getJob());
+        Picasso.with(this).load(barber.getPhoto()).into(barberPhoto);
 
     }
 
