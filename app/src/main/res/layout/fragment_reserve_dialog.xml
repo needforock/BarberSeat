@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="ve.needforock.barberseat.views.dialog_fragment.ReserveDialogFragment">
+    tools:context="ve.needforock.barberseats.views.dialog_fragment.ReserveDialogFragment">
 
     <RadioGroup
         android:id="@+id/jobRg"

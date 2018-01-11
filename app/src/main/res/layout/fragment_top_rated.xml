@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:theme="@style/AppTheme"
     android:background="@color/colorBackground"
-    tools:context="ve.needforock.barberseat.views.barber_selection.BarberSelectionActivity">
+    tools:context="ve.needforock.barberseats.views.barber_selection.BarberSelectionActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/topRatedRv"

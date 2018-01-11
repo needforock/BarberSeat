@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
 
-    package="ve.needforock.barberseat">
+    package="ve.needforock.barberseats">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".views.login.LoginActivity"
+            android:name="ve.needforock.barberseats.views.login.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/LoginTheme">
@@ -27,18 +27,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.main.MainActivity"
+            android:name="ve.needforock.barberseats.views.main.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".views.barber_selection.BarberSelectionActivity" />
-        <activity android:name=".views.day.DayView" />
+        <activity android:name="ve.needforock.barberseats.views.barber_selection.BarberSelectionActivity" />
+        <activity android:name="ve.needforock.barberseats.views.day.DayView" />
         <activity
-            android:name=".views.appointment_detail.AppointmentDetailActivity"
+            android:name="ve.needforock.barberseats.views.appointment_detail.AppointmentDetailActivity"
             android:label="@string/title_activity_appointment_detail"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".views.barber_detail.BarberDetailActivity" />
+        <activity android:name="ve.needforock.barberseats.views.barber_detail.BarberDetailActivity" />
 
-        <activity android:name=".views.user_detail.UserDetailActivity"></activity>
+        <activity android:name="ve.needforock.barberseats.views.user_detail.UserDetailActivity"></activity>
         <meta-data
             tools:replace="android:value"
             android:name="io.fabric.ApiKey"
