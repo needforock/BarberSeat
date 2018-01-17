@@ -44,10 +44,10 @@ public class DayView extends AppCompatActivity implements DayListener, CheckHour
         jobName = job.getName();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        year = String.valueOf(cal.get(cal.YEAR));
-        month = String.valueOf(cal.get(cal.MONTH));
-        realMonth = String.valueOf(cal.get(cal.MONTH) + 1);
-        day = String.valueOf(cal.get(cal.DAY_OF_MONTH));
+        year = String.valueOf(cal.get(Calendar.YEAR));
+        month = String.valueOf(cal.get(Calendar.MONTH));
+        realMonth = String.valueOf(cal.get(Calendar.MONTH) + 1);
+        day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
 
         getSupportActionBar().setTitle(jobName + " el " + day + "-" + realMonth + "-" + year);
 

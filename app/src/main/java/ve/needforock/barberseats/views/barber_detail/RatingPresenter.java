@@ -1,6 +1,5 @@
 package ve.needforock.barberseats.views.barber_detail;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,12 +24,12 @@ import ve.needforock.barberseats.models.Rating;
 public class RatingPresenter {
 
     private RatingCallBack ratingCallBack;
-    private Context context;
+
 
 
     public RatingPresenter(RatingCallBack ratingCallBack) {
         this.ratingCallBack = ratingCallBack;
-        this.context = context;
+
     }
 
     public void rateBarber(String barberUid, final float ratingValue){
@@ -48,13 +47,6 @@ public class RatingPresenter {
 
                     return Transaction.success(mutableData);
                 }
-
-               /* if (rating.getStars().containsKey(userUid)){
-
-                    return Transaction.abort();
-
-                } else{*/
-
 
                     Map<String, Boolean> map = rating.getStars();
                     map.put(userUid, true);
@@ -76,10 +68,6 @@ public class RatingPresenter {
                         rating.setRating(5-newRatingValue);
 
                     }
-
-
-                //}
-
                 mutableData.setValue(rating);
                 return Transaction.success(mutableData);
 

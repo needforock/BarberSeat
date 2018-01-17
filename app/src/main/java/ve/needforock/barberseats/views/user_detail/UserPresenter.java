@@ -50,8 +50,6 @@ public class UserPresenter implements ValueEventListener {
 
             }else{
                 userCallBack.userPhoneNull();
-
-
             }
         }
 

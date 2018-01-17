@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -33,7 +32,7 @@ public class UserDetailActivity extends AppCompatActivity implements SaveUserPho
     private TextView name, mail, phone, number;
     private LinearLayout phoneLL;
     private FloatingActionButton save, edit;
-    private String userPhoneValid, path, userPhotoValid,userImageUrl;
+    private String userPhoneValid, path, userImageUrl, uid;
     private CircularImageView circularImageView;
     private MagicalPermissions magicalPermissions;
     private MagicalCamera magicalCamera;
@@ -41,7 +40,7 @@ public class UserDetailActivity extends AppCompatActivity implements SaveUserPho
     private FirebaseUser firebaseUser;
     private ProgressDialog progressDialog;
     private UserPresenter userPresenter;
-    private String uid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +79,6 @@ public class UserDetailActivity extends AppCompatActivity implements SaveUserPho
 
             }
         });
-
-        final Uri userImageUri = firebaseUser.getPhotoUrl();
-        if(userImageUri!=null){
-
-            Picasso.with(this).load(userImageUri).into(circularImageView);
-        }
-
 
 
         mail.setText(firebaseUser.getEmail());
@@ -164,7 +156,12 @@ public class UserDetailActivity extends AppCompatActivity implements SaveUserPho
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        new SaveUserPhoto(this).photoToFirebase(path, firebaseUser.getDisplayName().trim());
+        String userName = firebaseUser.getDisplayName();
+        if (userName==null){
+            new SaveUserPhoto(this).photoToFirebase(path, "x");
+        }else {
+            new SaveUserPhoto(this).photoToFirebase(path, firebaseUser.getDisplayName().trim());
+        }
     }
 
 
@@ -186,7 +183,7 @@ public class UserDetailActivity extends AppCompatActivity implements SaveUserPho
 
     @Override
     public void photoNoNull(String photo) {
-        userPhotoValid = photo;
+
         Picasso.with(this).invalidate(photo);
         Picasso.with(this).load(photo).into(circularImageView);
 

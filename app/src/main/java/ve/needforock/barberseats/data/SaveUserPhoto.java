@@ -27,7 +27,7 @@ public class SaveUserPhoto {
         if (path != null) {
 
             final CurrentUser currentUser = new CurrentUser();
-            new Nodes().user(currentUser.getUid()).child("details").child("timeStamp").setValue(ServerValue.TIMESTAMP);
+            new Nodes().user(currentUser.getUid()).child("timeStamp").setValue(ServerValue.TIMESTAMP);
             String folder = currentUser.sanitizedEmail(currentUser.userEmail() + "/");
             String photoName = name + ".png";
             String baseUrl = "gs://barberseat-a2756.appspot.com/users/" + folder;

@@ -41,14 +41,14 @@ public class AppointmentAdapter extends FirebaseRecyclerAdapter<Appointment, App
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(model.getDate());
         Date currentTime = Calendar.getInstance().getTime();
-        int day = calendar.get(calendar.DAY_OF_MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
         String dayString = String.valueOf(day);
         if (dayString.trim().length() == 1){
             dayString = "0" + dayString;
         }
-        String month = String.valueOf(calendar.get(calendar.MONTH) + 1);
-        String year = String.valueOf(calendar.get(calendar.YEAR));
-        String hour = String.valueOf(calendar.get(calendar.HOUR_OF_DAY)) + ":00";
+        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        String year = String.valueOf(calendar.get(Calendar.YEAR));
+        String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) + ":00";
         String date = dayString + "-" + month + "-" + year + " / " + hour;
 
         if(model.getDate().getTime()<currentTime.getTime()) {

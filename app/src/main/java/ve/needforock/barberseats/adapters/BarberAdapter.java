@@ -57,7 +57,7 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
             }
         });
 
-       // Log.d("PHOTO", String.valueOf(barber.getPhoto()));
+
         if(barber.getPhoto().trim().length()>0 && barber.getPhoto()!=null) {
             Picasso.with(holder.barberPhoto.getContext()).load(barber.getPhoto()).into(holder.barberPhoto);
 

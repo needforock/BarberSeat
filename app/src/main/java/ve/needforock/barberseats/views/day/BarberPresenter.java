@@ -25,10 +25,8 @@ public class BarberPresenter {
 
     public void checkDay(String barberUid, String year, String month, String day){
 
-        DatabaseReference barberAppDay = new Nodes().appointmentDay(barberUid)
-                .child(year)
-                .child(month)
-                .child(day);
+        DatabaseReference barberAppDay = new Nodes().day(barberUid, year, month, day);
+
 
         barberAppDay.addValueEventListener(new ValueEventListener() {
             @Override

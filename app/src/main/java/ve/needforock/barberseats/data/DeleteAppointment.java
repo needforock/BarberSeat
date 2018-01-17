@@ -1,7 +1,5 @@
 package ve.needforock.barberseats.data;
 
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,15 +27,14 @@ public class DeleteAppointment {
         DatabaseReference ref2 = new Nodes().appointments(appointment.getBarberUid());
         ref2.child(appointment.getKey()).removeValue();
 
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(appointment.getDate());
-        String year = String.valueOf(calendar.get(calendar.YEAR));
-        String month = String.valueOf(calendar.get(calendar.MONTH));
-        String day = String.valueOf(calendar.get(calendar.DAY_OF_MONTH));
-        hour = String.valueOf(calendar.get(calendar.HOUR_OF_DAY)) + ":00";
+        String year = String.valueOf(calendar.get(Calendar.YEAR));
+        String month = String.valueOf(calendar.get(Calendar.MONTH));
+        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) + ":00";
 
-        Log.d("FECHA", year + month + day + hour);
+
         final DatabaseReference ref3 = new Nodes().appointmentDay(appointment.getBarberUid()).child(year).child(month).child(day);
         ref3.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

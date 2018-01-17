@@ -30,10 +30,10 @@ import ve.needforock.barberseats.views.barber_detail.BarberDetailActivity;
  */
 public class AppointmentFragment extends Fragment implements AppointmentListener {
 
-    public static final String BARBER2_UID ="ve.needforock.barberseat.views.appointment.KEY.BARBER2_UID" ;
+    public static final String BARBER2_UID ="ve.needforock.barberseats.views.appointment.KEY.BARBER2_UID" ;
     private RecyclerView recyclerView;
     private AppointmentAdapter appointmentAdapter;
-    public static final String APPOINTMENT = "ve.needforock.barberseat.views.appointment.KEY.APPOINTMENT";
+    public static final String APPOINTMENT = "ve.needforock.barberseats.views.appointment.KEY.APPOINTMENT";
     private AddAppointmentRequestListener listener;
 
 

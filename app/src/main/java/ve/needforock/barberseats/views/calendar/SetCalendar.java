@@ -71,8 +71,8 @@ public class SetCalendar {
 
     private void refreshData(final Calendar cal, String barberUid, final CaldroidFragment dialogCaldroidFragment) {
 
-        final int year = cal.get(cal.YEAR);
-        final int month = cal.get(cal.MONTH);
+        final int year = cal.get(Calendar.YEAR);
+        final int month = cal.get(Calendar.MONTH);
 
         DatabaseReference barberAppMonth = new Nodes().appointmentDay(barberUid)
                 .child(String.valueOf(year))

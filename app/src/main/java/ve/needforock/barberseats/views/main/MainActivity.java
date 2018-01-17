@@ -24,17 +24,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import ve.needforock.barberseats.R;
 import ve.needforock.barberseats.data.CurrentUser;
 import ve.needforock.barberseats.data.UserToFireBase;
-import ve.needforock.barberseats.models.Barber;
-import ve.needforock.barberseats.models.Job;
-import ve.needforock.barberseats.models.Rating;
 import ve.needforock.barberseats.views.appointment.AddAppointmentRequestListener;
 import ve.needforock.barberseats.views.appointment.AppointmentFragment;
 import ve.needforock.barberseats.views.job_selection.JobFragment;
@@ -73,60 +65,6 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         getSupportActionBar().setTitle("Reservar");
-
-        //////////////////////Manejar Header del Drawer///////////////////////
-
-        //Registrar el barbero en firebase database
-        final Barber newBarber = new Barber();
-        newBarber.setPhone("+5612345678");
-        newBarber.setUid("456");
-        newBarber.setName("Pedrito Perez");
-        Map<String, String> map1 = new HashMap<>();
-        map1.put(String.valueOf(System.currentTimeMillis()), "Corte");
-        map1.put(String.valueOf(System.currentTimeMillis()+1), "Rasurado");
-        newBarber.setJobs(map1);
-
-        Rating rating = new Rating();
-        rating.setRatingTimes(0);
-        rating.setRating(0);
-        /*Map<String ,Boolean> stars = new HashMap<>();
-        stars.put("x", false);
-        rating.setStars(stars);
-        new Nodes().barberRating("456").setValue(rating);*/
-
-
-
-
-        final Barber newBarber2 = new Barber();
-        newBarber2.setPhone("+5645678941");
-        newBarber2.setUid("457");
-        newBarber2.setName("Juanito Alimana");
-        newBarber2.setJobs(map1);
-
-        //new RatingPresenter(MainActivity.this).rateBarber(newBarber2.getUid(), 0);
-
-
-
-        Job shave = new Job();
-        shave.setName("Rasurado");
-        List<Barber> barbers = new ArrayList<>();
-        barbers.add(newBarber);
-        barbers.add(newBarber2);
-        shave.setBarberList(barbers);
-        //new Nodes().jobs().child("rasurado").setValue(shave);
-
-
-        Job cut = new Job();
-        cut.setName("Corte");
-        List<Barber> barbers2 = new ArrayList<>();
-        barbers2.add(newBarber);
-        barbers2.add(newBarber2);
-        cut.setBarberList(barbers2);
-        //new Nodes().jobs().child("corte").setValue(cut);
-
-
-       // new Nodes().barber(newBarber.getUid()).setValue(newBarber);
-       // new Nodes().barber(newBarber2.getUid()).setValue(newBarber2);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

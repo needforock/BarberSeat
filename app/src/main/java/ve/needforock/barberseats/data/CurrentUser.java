@@ -1,7 +1,5 @@
 package ve.needforock.barberseats.data;
 
-import android.net.Uri;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -20,9 +18,6 @@ public class CurrentUser {
     public String userEmail(){
         return getCurrentUser().getEmail();
     }
-    public String userName(){
-        return getCurrentUser().getDisplayName();
-    }
 
     public String getUid(){
         return currentUser.getUid();
@@ -32,7 +27,5 @@ public class CurrentUser {
         return email.replace("@", "AT").replace(".","DOT");
     }
 
-    public Uri userPhoto(){
-       return getCurrentUser().getPhotoUrl();
-    }
+
 }

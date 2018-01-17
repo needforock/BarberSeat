@@ -11,14 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.Query;
-
 import java.util.ArrayList;
 
 import ve.needforock.barberseats.R;
 import ve.needforock.barberseats.adapters.JobAdapter;
 import ve.needforock.barberseats.adapters.JobListener;
-import ve.needforock.barberseats.data.Queries;
 import ve.needforock.barberseats.models.Barber;
 import ve.needforock.barberseats.models.Job;
 import ve.needforock.barberseats.views.barber_selection.BarberSelectionActivity;
@@ -30,8 +27,8 @@ public class JobFragment extends Fragment implements JobListener {
 
     private RecyclerView recyclerView;
     private JobAdapter jobAdapter;
-    public static final String BARBERS = "ve.needforock.barberseat.views.appointment.KEY.BARBERS";
-    public static final String SELECTED_JOB ="ve.needforock.barberseat.views.appointment.KEY.SELECTED_JOB";
+    public static final String BARBERS = "ve.needforock.barberseats.views.appointment.KEY.BARBERS";
+    public static final String SELECTED_JOB ="ve.needforock.barberseats.views.appointment.KEY.SELECTED_JOB";
 
 
 
@@ -50,11 +47,11 @@ public class JobFragment extends Fragment implements JobListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Query query = new Queries().BarberJobs();
+
         recyclerView = view.findViewById(R.id.jobRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        jobAdapter = new JobAdapter(this, query, getContext());
+        jobAdapter = new JobAdapter(this, getContext());
         recyclerView.setAdapter(jobAdapter);
 
 

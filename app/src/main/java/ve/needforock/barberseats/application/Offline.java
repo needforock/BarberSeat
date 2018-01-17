@@ -27,7 +27,8 @@ public class Offline {
         root.child("appointmentDays").child("457").keepSynced(true);
 
         FirebaseUser user = new CurrentUser().getCurrentUser();
-        root.child("users").child(user.getUid()).child("appointments").keepSynced(true);
+        root.child("users_appointments").child(user.getUid()).keepSynced(true);
+        root.child("users").child(user.getUid()).keepSynced(true);
 
     }
 }

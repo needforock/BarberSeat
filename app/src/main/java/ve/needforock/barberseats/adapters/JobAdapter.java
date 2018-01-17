@@ -7,10 +7,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
 import ve.needforock.barberseats.R;
+import ve.needforock.barberseats.data.Queries;
 import ve.needforock.barberseats.models.Job;
 
 /**
@@ -23,8 +23,8 @@ public class JobAdapter extends FirebaseRecyclerAdapter<Job, JobAdapter.JobHolde
     private Context context;
 
 
-    public JobAdapter(JobListener jobListener, Query ref, Context context) {
-        super(Job.class, R.layout.list_item_job, JobHolder.class, ref);
+    public JobAdapter(JobListener jobListener, Context context) {
+        super(Job.class, R.layout.list_item_job, JobHolder.class, new Queries().BarberJobs());
         this.jobListener = jobListener;
         this.context = context;
     }
@@ -57,10 +57,6 @@ public class JobAdapter extends FirebaseRecyclerAdapter<Job, JobAdapter.JobHolde
 
             job = itemView.findViewById(R.id.jobTv);
             jobPic = itemView.findViewById(R.id.jobPicIv);
-
-
-
-
         }
     }
 }

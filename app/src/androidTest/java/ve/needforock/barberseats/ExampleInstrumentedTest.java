@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under selectJob.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("ve.needforock.barberseat", appContext.getPackageName());
+        assertEquals("ve.needforock.barberseats", appContext.getPackageName());
     }
 }

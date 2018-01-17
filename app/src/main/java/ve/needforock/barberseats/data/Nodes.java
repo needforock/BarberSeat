@@ -47,4 +47,9 @@ public class Nodes {
         return root.child("barber_rating");
     }
 
+    public  DatabaseReference day(String barberUid, String year, String month, String day){
+        return appointmentDay(barberUid).child(year).child(month).child(day);
+
+    }
+
 }

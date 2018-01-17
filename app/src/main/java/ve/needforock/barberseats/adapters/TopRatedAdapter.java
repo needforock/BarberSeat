@@ -10,12 +10,12 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import ve.needforock.barberseats.R;
 import ve.needforock.barberseats.data.Nodes;
+import ve.needforock.barberseats.data.Queries;
 import ve.needforock.barberseats.models.Barber;
 import ve.needforock.barberseats.models.Rating;
 
@@ -27,8 +27,8 @@ public class TopRatedAdapter extends FirebaseRecyclerAdapter<Rating, TopRatedAda
     private TopRatedListener topRatedListener;
 
 
-    public TopRatedAdapter(Query ref, TopRatedListener topRatedListener) {
-        super(Rating.class, R.layout.list_item_top_rated,TopRatedHolder.class, ref);
+    public TopRatedAdapter( TopRatedListener topRatedListener) {
+        super(Rating.class, R.layout.list_item_top_rated,TopRatedHolder.class,  new Queries().BarberRating().orderByChild("rating"));
         this.topRatedListener = topRatedListener;
     }
 
@@ -74,7 +74,7 @@ public class TopRatedAdapter extends FirebaseRecyclerAdapter<Rating, TopRatedAda
     }
 
     public static class TopRatedHolder extends RecyclerView.ViewHolder {
-        private TextView barber, date, job, view, book;
+        private TextView barber, view, book;
         private CircularImageView circularImageView;
         private RatingBar ratingBar;
 

@@ -14,7 +14,7 @@
         android:layout_height="150dp"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_android_black_24dp"
+
         app:siBorderWidth="3dp"
         app:siBorderColor="@color/colorPrimaryDark"/>
 

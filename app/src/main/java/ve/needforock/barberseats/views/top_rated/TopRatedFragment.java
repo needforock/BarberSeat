@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.roomorama.caldroid.CaldroidFragment;
 
 import java.util.Collection;
@@ -26,7 +25,6 @@ import ve.needforock.barberseats.R;
 import ve.needforock.barberseats.adapters.TopRatedAdapter;
 import ve.needforock.barberseats.adapters.TopRatedListener;
 import ve.needforock.barberseats.data.Nodes;
-import ve.needforock.barberseats.data.Queries;
 import ve.needforock.barberseats.models.Job;
 import ve.needforock.barberseats.views.barber_detail.BarberDetailActivity;
 import ve.needforock.barberseats.views.calendar.SelectedDateCallBack;
@@ -72,11 +70,11 @@ public class TopRatedFragment extends Fragment implements TopRatedListener, Sele
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Query query = new Queries().BarberRating().orderByChild("rating");
+
         recyclerView = view.findViewById(R.id.topRatedRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        topRatedAdapter = new TopRatedAdapter(query, TopRatedFragment.this);
+        topRatedAdapter = new TopRatedAdapter( TopRatedFragment.this);
         recyclerView.setAdapter(topRatedAdapter);
         state = savedInstanceState;
 

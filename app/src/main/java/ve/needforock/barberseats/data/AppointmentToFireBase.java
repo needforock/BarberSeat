@@ -29,27 +29,18 @@ public class AppointmentToFireBase {
         customerUid = new CurrentUser().getUid();
         appointment.setUserUID(customerUid);
         appointment.setJob(jobName);
-
         Calendar cal2 = Calendar.getInstance();
         cal2.setTime(date);
-
-        day = cal2.get(cal2.DAY_OF_MONTH);
-
-        month = cal2.get(cal2.MONTH);
-        year = cal2.get(cal2.YEAR);
+        day = cal2.get(Calendar.DAY_OF_MONTH);
+        month = cal2.get(Calendar.MONTH);
+        year = cal2.get(Calendar.YEAR);
         String[] fullHour = hour.split(":");
         hours = Integer.parseInt(fullHour[0]);
         int  minutes = Integer.parseInt(fullHour[1]);
         cal2.set(year, month, day, hours,minutes);
         Date finalDate = cal2.getTime();
         appointment.setDate(finalDate);
-
-
-
-
-
         prepareUpload(date, barberUid, appointment, hour);
-
 
     }
 
@@ -57,14 +48,12 @@ public class AppointmentToFireBase {
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-
-
         final BarberDay barberDay = new BarberDay();
         barberDay.setDate(date);
         final DatabaseReference ref =  new Nodes().appointmentDay(barberUid)
-                .child(String.valueOf(cal.get(cal.YEAR)))
-                .child(String.valueOf(cal.get(cal.MONTH)))
-                .child(String.valueOf(cal.get(cal.DAY_OF_MONTH)));
+                .child(String.valueOf(cal.get(Calendar.YEAR)))
+                .child(String.valueOf(cal.get(Calendar.MONTH)))
+                .child(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -101,7 +90,6 @@ public class AppointmentToFireBase {
     public void increaseAppointmentCount(String customerUid){
 
         final DatabaseReference ref = new Nodes().user(customerUid);
-
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
